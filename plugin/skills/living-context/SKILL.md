@@ -18,12 +18,12 @@ Living Context provides a structured approach to keeping documentation synchroni
 
 ## Commands Reference
 
-All commands use the `uv run lctx` prefix.
+All commands use the `uv run cctx` prefix.
 
 ### Initialize Project Context
 
 ```bash
-uv run lctx init [PATH]
+uv run cctx init [PATH]
 ```
 
 Create `.ctx/` directory structure including knowledge.db, graph.json, templates/, and README.md. Defaults to current directory if no path specified.
@@ -36,7 +36,7 @@ Create `.ctx/` directory structure including knowledge.db, graph.json, templates
 ### Check Context Health
 
 ```bash
-uv run lctx health [--deep]
+uv run cctx health [--deep]
 ```
 
 Run health checks on Living Context documentation. Validates file presence, formatting, and synchronization.
@@ -55,7 +55,7 @@ Run health checks on Living Context documentation. Validates file presence, form
 ### Show Status Summary
 
 ```bash
-uv run lctx status
+uv run cctx status
 ```
 
 Display overview of documented systems, ADR count and status breakdown, technical debt items, and last sync timestamp.
@@ -63,7 +63,7 @@ Display overview of documented systems, ADR count and status breakdown, technica
 ### Sync Documentation
 
 ```bash
-uv run lctx sync [--dry-run]
+uv run cctx sync [--dry-run]
 ```
 
 Analyze codebase for changes requiring documentation updates. Uses freshness checker to identify stale documentation.
@@ -74,7 +74,7 @@ Analyze codebase for changes requiring documentation updates. Uses freshness che
 ### Pre-commit Validation
 
 ```bash
-uv run lctx validate
+uv run cctx validate
 ```
 
 Run validation suitable for pre-commit hooks. Checks context file integrity, ADR format, required fields, and system registrations. Exits with code 2 if validation fails.
@@ -82,7 +82,7 @@ Run validation suitable for pre-commit hooks. Checks context file integrity, ADR
 ### Add System Context
 
 ```bash
-uv run lctx add-system <PATH> [--name NAME]
+uv run cctx add-system <PATH> [--name NAME]
 ```
 
 Create `.ctx/` directory structure for a system/module with:
@@ -98,7 +98,7 @@ Create `.ctx/` directory structure for a system/module with:
 ### Create ADR
 
 ```bash
-uv run lctx adr <TITLE> [--system PATH]
+uv run cctx adr <TITLE> [--system PATH]
 ```
 
 Create a new Architecture Decision Record from template with next available number. Creates in system's `.ctx/adr/` if system specified, otherwise in global `.ctx/adr/`.
@@ -109,7 +109,7 @@ Create a new Architecture Decision Record from template with next available numb
 ### List Entities
 
 ```bash
-uv run lctx list [systems|adrs|debt]
+uv run cctx list [systems|adrs|debt]
 ```
 
 List registered entities. Defaults to systems if no entity type specified.
@@ -145,17 +145,17 @@ src/systems/<name>/.ctx/
 
 | Task | Command |
 |------|---------|
-| Start a new project with Living Context | `uv run lctx init` |
-| Add context tracking to existing system | `uv run lctx add-system src/systems/auth` |
-| Check if documentation is current | `uv run lctx health` |
-| Deep validation including constraints | `uv run lctx health --deep` |
-| Quick status overview | `uv run lctx status` |
-| Find stale documentation | `uv run lctx sync --dry-run` |
-| Pre-commit validation | `uv run lctx validate` |
-| Record architectural decision | `uv run lctx adr "Use PostgreSQL"` |
-| List all documented systems | `uv run lctx list systems` |
-| Review all ADRs | `uv run lctx list adrs` |
-| Audit technical debt | `uv run lctx list debt` |
+| Start a new project with Living Context | `uv run cctx init` |
+| Add context tracking to existing system | `uv run cctx add-system src/systems/auth` |
+| Check if documentation is current | `uv run cctx health` |
+| Deep validation including constraints | `uv run cctx health --deep` |
+| Quick status overview | `uv run cctx status` |
+| Find stale documentation | `uv run cctx sync --dry-run` |
+| Pre-commit validation | `uv run cctx validate` |
+| Record architectural decision | `uv run cctx adr "Use PostgreSQL"` |
+| List all documented systems | `uv run cctx list systems` |
+| Review all ADRs | `uv run cctx list adrs` |
+| Audit technical debt | `uv run cctx list debt` |
 
 ### File Update Guidelines
 
@@ -195,7 +195,7 @@ These rules define how AI agents should interact with Living Context.
 
 ### Before Completing Work on a System
 
-1. Run `uv run lctx health` to verify documentation is current
+1. Run `uv run cctx health` to verify documentation is current
 2. Fix any issues before considering work complete
 
 ## Common Workflows
@@ -207,7 +207,7 @@ These rules define how AI agents should interact with Living Context.
 mkdir -p src/systems/auth
 
 # Add context structure
-uv run lctx add-system src/systems/auth --name "Authentication System"
+uv run cctx add-system src/systems/auth --name "Authentication System"
 
 # Fill in snapshot.md with purpose, API, dependencies
 # Add constraints to constraints.md
@@ -218,10 +218,10 @@ uv run lctx add-system src/systems/auth --name "Authentication System"
 
 ```bash
 # Create ADR for a system
-uv run lctx adr "Use JWT for session tokens" --system src/systems/auth
+uv run cctx adr "Use JWT for session tokens" --system src/systems/auth
 
 # Or create global ADR
-uv run lctx adr "Adopt monorepo structure"
+uv run cctx adr "Adopt monorepo structure"
 
 # Update decisions.md to index the new ADR
 # Register in knowledge.db
@@ -231,11 +231,11 @@ uv run lctx adr "Adopt monorepo structure"
 
 ```bash
 # Quick validation
-uv run lctx validate
+uv run cctx validate
 
 # If issues found, check health for details
-uv run lctx health
+uv run cctx health
 
 # Find what needs updating
-uv run lctx sync --dry-run
+uv run cctx sync --dry-run
 ```

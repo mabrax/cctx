@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from lctx.validators.base import FixableIssue
+from cctx.validators.base import FixableIssue
 
 
 @dataclass

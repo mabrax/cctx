@@ -1,4 +1,4 @@
-"""Tests for lctx.adr_crud module."""
+"""Tests for cctx.adr_crud module."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from lctx.adr_crud import (
+from cctx.adr_crud import (
     add_tag,
     create_adr,
     delete_adr,
@@ -25,8 +25,8 @@ from lctx.adr_crud import (
     unlink_adr_from_system,
     update_adr,
 )
-from lctx.crud import create_system
-from lctx.database import ContextDB
+from cctx.crud import create_system
+from cctx.database import ContextDB
 
 
 @pytest.fixture

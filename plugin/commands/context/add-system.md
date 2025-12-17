@@ -5,7 +5,7 @@ argument-hint: "<path>"
 
 Create Living Context documentation for a new system.
 
-Run: `lctx add-system $ARGUMENTS`
+Run: `cctx add-system $ARGUMENTS`
 
 Creates in `<path>/.ctx/`:
 - `snapshot.md` - System purpose, API, dependencies

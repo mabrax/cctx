@@ -7,9 +7,9 @@ import json
 import sys
 from pathlib import Path
 from typing import Any
+from unittest import mock
 
 import pytest
-from unittest import mock
 
 # Import the runner module directly from plugin/eval/runner.py
 runner_path = Path(__file__).parent.parent / "plugin" / "eval" / "runner.py"
@@ -40,32 +40,32 @@ class TestRunTestCase:
         """Test that run_test_case calls subprocess with shell=False and split command."""
         test_case = {
             "name": "test1",
-            "command": "lctx init --json",
+            "command": "cctx init --json",
             "expected": {"exit_code": 0}
         }
         work_dir = tmp_path / "work"
         work_dir.mkdir()
-        lctx_dir = tmp_path / "lctx"
-        lctx_dir.mkdir()
+        cctx_dir = tmp_path / "cctx"
+        cctx_dir.mkdir()
 
         with mock.patch("subprocess.run") as mock_run:
             mock_run.return_value.returncode = 0
             mock_run.return_value.stdout = ""
             mock_run.return_value.stderr = ""
 
-            run_test_case(test_case, work_dir, lctx_dir)
+            run_test_case(test_case, work_dir, cctx_dir)
 
             # Verify call args
             mock_run.assert_called_once()
             args, kwargs = mock_run.call_args
-            
+
             # Check command is split
-            assert args[0] == ["lctx", "init", "--json"]
+            assert args[0] == ["cctx", "init", "--json"]
             # Check shell is False
             assert kwargs.get("shell") is False
             # Check cwd and env
             assert kwargs.get("cwd") == work_dir
-            assert "LCTX_PROJECT_DIR" in kwargs.get("env", {})
+            assert "CCTX_PROJECT_DIR" in kwargs.get("env", {})
 
 
 class TestLoadFixture:
@@ -173,11 +173,11 @@ class TestLoadTestCases:
 command: init
 test_cases:
   - name: test1
-    command: lctx init
+    command: cctx init
     expected:
       exit_code: 0
   - name: test2
-    command: lctx init --help
+    command: cctx init --help
     expected:
       exit_code: 0
 """
@@ -202,7 +202,7 @@ test_cases:
 command: init
 test_cases:
   - name: init_test
-    command: lctx init
+    command: cctx init
     expected:
       exit_code: 0
 """
@@ -215,7 +215,7 @@ test_cases:
 command: health
 test_cases:
   - name: health_test
-    command: lctx health
+    command: cctx health
     expected:
       exit_code: 0
 """
@@ -238,7 +238,7 @@ test_cases:
 command: init
 test_cases:
   - name: init_test
-    command: lctx init
+    command: cctx init
     expected:
       exit_code: 0
 """
@@ -250,7 +250,7 @@ test_cases:
 command: health
 test_cases:
   - name: health_test
-    command: lctx health
+    command: cctx health
     expected:
       exit_code: 0
 """
@@ -271,11 +271,11 @@ test_cases:
 command: init
 test_cases:
   - name: test1
-    command: lctx init
+    command: cctx init
     expected:
       exit_code: 0
   - name: test2
-    command: lctx init --help
+    command: cctx init --help
     expected:
       exit_code: 0
 """
@@ -296,11 +296,11 @@ test_cases:
 command: init
 test_cases:
   - name: test1
-    command: lctx init
+    command: cctx init
     expected:
       exit_code: 0
   - name: test2
-    command: lctx init --help
+    command: cctx init --help
     expected:
       exit_code: 0
 """
@@ -312,7 +312,7 @@ test_cases:
 command: health
 test_cases:
   - name: test1
-    command: lctx health
+    command: cctx health
     expected:
       exit_code: 0
 """
@@ -352,7 +352,7 @@ description: This file has no test_cases
 command: valid
 test_cases:
   - name: test1
-    command: lctx valid
+    command: cctx valid
     expected:
       exit_code: 0
 """
@@ -552,14 +552,14 @@ class TestTestResult:
         """Test creating a TestResult."""
         result = TestResult(
             name="test1",
-            command="lctx init",
+            command="cctx init",
             passed=True,
             exit_code=0,
             expected_exit_code=0,
             stdout="Success",
         )
         assert result.name == "test1"
-        assert result.command == "lctx init"
+        assert result.command == "cctx init"
         assert result.passed is True
         assert result.exit_code == 0
 
@@ -567,7 +567,7 @@ class TestTestResult:
         """Test TestResult.to_dict for passed test."""
         result = TestResult(
             name="test1",
-            command="lctx init",
+            command="cctx init",
             passed=True,
             exit_code=0,
             expected_exit_code=0,
@@ -584,7 +584,7 @@ class TestTestResult:
         """Test TestResult.to_dict for failed test."""
         result = TestResult(
             name="test1",
-            command="lctx init",
+            command="cctx init",
             passed=False,
             exit_code=1,
             expected_exit_code=0,
@@ -602,7 +602,7 @@ class TestTestResult:
         """Test TestResult has default empty stderr."""
         result = TestResult(
             name="test1",
-            command="lctx init",
+            command="cctx init",
             passed=True,
             exit_code=0,
             expected_exit_code=0,
@@ -614,7 +614,7 @@ class TestTestResult:
         """Test TestResult has default empty errors list."""
         result = TestResult(
             name="test1",
-            command="lctx init",
+            command="cctx init",
             passed=True,
             exit_code=0,
             expected_exit_code=0,
@@ -630,7 +630,7 @@ class TestPrintResult:
         """Test printing a passing result."""
         result = TestResult(
             name="test1",
-            command="lctx init",
+            command="cctx init",
             passed=True,
             exit_code=0,
             expected_exit_code=0,
@@ -645,7 +645,7 @@ class TestPrintResult:
         """Test printing a failing result."""
         result = TestResult(
             name="test1",
-            command="lctx init",
+            command="cctx init",
             passed=False,
             exit_code=1,
             expected_exit_code=0,
@@ -662,7 +662,7 @@ class TestPrintResult:
         """Test printing a passing result in verbose mode."""
         result = TestResult(
             name="test1",
-            command="lctx init",
+            command="cctx init",
             passed=True,
             exit_code=0,
             expected_exit_code=0,
@@ -679,7 +679,7 @@ class TestPrintResult:
         """Test printing a failing result in verbose mode."""
         result = TestResult(
             name="test1",
-            command="lctx init",
+            command="cctx init",
             passed=False,
             exit_code=1,
             expected_exit_code=0,
@@ -701,7 +701,7 @@ class TestPrintSummary:
         results = [
             TestResult(
                 name="test1",
-                command="lctx init",
+                command="cctx init",
                 passed=True,
                 exit_code=0,
                 expected_exit_code=0,
@@ -709,7 +709,7 @@ class TestPrintSummary:
             ),
             TestResult(
                 name="test2",
-                command="lctx health",
+                command="cctx health",
                 passed=True,
                 exit_code=0,
                 expected_exit_code=0,
@@ -726,7 +726,7 @@ class TestPrintSummary:
         results = [
             TestResult(
                 name="test1",
-                command="lctx init",
+                command="cctx init",
                 passed=True,
                 exit_code=0,
                 expected_exit_code=0,
@@ -734,7 +734,7 @@ class TestPrintSummary:
             ),
             TestResult(
                 name="test2",
-                command="lctx health",
+                command="cctx health",
                 passed=False,
                 exit_code=1,
                 expected_exit_code=0,
@@ -763,7 +763,7 @@ class TestGenerateJsonReport:
         results = [
             TestResult(
                 name="test1",
-                command="lctx init",
+                command="cctx init",
                 passed=True,
                 exit_code=0,
                 expected_exit_code=0,
@@ -771,7 +771,7 @@ class TestGenerateJsonReport:
             ),
             TestResult(
                 name="test2",
-                command="lctx health",
+                command="cctx health",
                 passed=True,
                 exit_code=0,
                 expected_exit_code=0,
@@ -789,7 +789,7 @@ class TestGenerateJsonReport:
         results = [
             TestResult(
                 name="test1",
-                command="lctx init",
+                command="cctx init",
                 passed=True,
                 exit_code=0,
                 expected_exit_code=0,
@@ -797,7 +797,7 @@ class TestGenerateJsonReport:
             ),
             TestResult(
                 name="test2",
-                command="lctx health",
+                command="cctx health",
                 passed=False,
                 exit_code=1,
                 expected_exit_code=0,
@@ -827,7 +827,7 @@ class TestGenerateJsonReport:
         results = [
             TestResult(
                 name="test1",
-                command="lctx init",
+                command="cctx init",
                 passed=True,
                 exit_code=0,
                 expected_exit_code=0,
@@ -880,7 +880,7 @@ class TestIntegration:
 command: init
 test_cases:
   - name: test_success
-    command: lctx init
+    command: cctx init
     expected:
       exit_code: 0
       stdout_contains: ["Success"]
@@ -920,7 +920,7 @@ command: init
 test_cases:
   - name: test1
     fixture: test-project
-    command: lctx init
+    command: cctx init
     expected:
       exit_code: 0
 """
@@ -943,7 +943,7 @@ test_cases:
         results = [
             TestResult(
                 name="test1",
-                command="lctx init",
+                command="cctx init",
                 passed=True,
                 exit_code=0,
                 expected_exit_code=0,
@@ -951,7 +951,7 @@ test_cases:
             ),
             TestResult(
                 name="test2",
-                command="lctx health",
+                command="cctx health",
                 passed=False,
                 exit_code=1,
                 expected_exit_code=0,

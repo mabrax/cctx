@@ -1,16 +1,14 @@
-"""Tests for lctx init command plugin installation functionality."""
+"""Tests for cctx init command plugin installation functionality."""
 
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 from unittest import mock
 
-import pytest
 from typer.testing import CliRunner
 
-from lctx.cli import app
+from cctx.cli import app
 
 runner = CliRunner()
 
@@ -35,7 +33,7 @@ class TestInitPluginInstallation:
         (test_plugin_src / "hooks").mkdir()
         (test_plugin_src / "hooks" / "pre-write-ctx-check.sh").write_text("#!/bin/bash")
 
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=test_plugin_src):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=test_plugin_src):
             result = runner.invoke(app, ["init", str(tmp_path)])
 
         assert result.exit_code == 0
@@ -66,7 +64,7 @@ class TestInitPluginInstallation:
         (test_plugin_src / "hooks").mkdir()
         (test_plugin_src / "hooks" / "pre-write-ctx-check.sh").write_text("#!/bin/bash")
 
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=test_plugin_src):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=test_plugin_src):
             result = runner.invoke(app, ["init", str(tmp_path)])
 
         assert result.exit_code == 0
@@ -98,7 +96,7 @@ class TestInitPluginInstallation:
         (test_plugin_src / "hooks").mkdir()
         (test_plugin_src / "hooks" / "pre-write-ctx-check.sh").write_text("#!/bin/bash")
 
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=test_plugin_src):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=test_plugin_src):
             # First init
             runner.invoke(app, ["init", str(tmp_path)])
             # Second init
@@ -124,7 +122,7 @@ class TestInitPluginInstallation:
         (test_plugin_src / "hooks").mkdir()
         (test_plugin_src / "hooks" / "pre-write-ctx-check.sh").write_text("#!/bin/bash")
 
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=test_plugin_src):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=test_plugin_src):
             # First init
             runner.invoke(app, ["init", str(tmp_path)])
 
@@ -160,7 +158,7 @@ class TestInitPluginInstallation:
         (test_plugin_src / "hooks").mkdir()
         (test_plugin_src / "hooks" / "pre-write-ctx-check.sh").write_text("#!/bin/bash")
 
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=test_plugin_src):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=test_plugin_src):
             result = runner.invoke(app, ["init", str(tmp_path), "--json"])
 
         assert result.exit_code == 0
@@ -172,7 +170,7 @@ class TestInitPluginInstallation:
 
     def test_init_fails_gracefully_if_plugin_source_not_found(self, tmp_path: Path) -> None:
         """Test init fails gracefully when plugin source not found."""
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=None):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=None):
             result = runner.invoke(app, ["init", str(tmp_path)])
 
         assert result.exit_code != 0
@@ -199,7 +197,7 @@ class TestInitPluginInstallation:
         (test_plugin_src / "hooks").mkdir()
         (test_plugin_src / "hooks" / "pre-write-ctx-check.sh").write_text("#!/bin/bash")
 
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=test_plugin_src):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=test_plugin_src):
             result = runner.invoke(app, ["init", str(tmp_path)])
 
         assert result.exit_code == 0
@@ -233,7 +231,7 @@ class TestInitStatusChecking:
         (ctx_dir / "graph.json").write_text("[]")
         (ctx_dir / "templates").mkdir()
 
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=test_plugin_src):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=test_plugin_src):
             result = runner.invoke(app, ["init", str(tmp_path)])
 
         assert result.exit_code == 0
@@ -256,14 +254,14 @@ class TestInitStatusChecking:
         (test_plugin_src / "hooks" / "pre-write-ctx-check.sh").write_text("#!/bin/bash")
 
         # First, do a full init
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=test_plugin_src):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=test_plugin_src):
             runner.invoke(app, ["init", str(tmp_path)])
 
         # Now corrupt the plugin by removing a required file
         plugin_dir = tmp_path / ".claude" / "plugins" / "living-context"
         (plugin_dir / "hooks" / "pre-write-ctx-check.sh").unlink()
 
-        with mock.patch("lctx.cli._get_plugin_source_path", return_value=test_plugin_src):
+        with mock.patch("cctx.cli._get_plugin_source_path", return_value=test_plugin_src):
             result = runner.invoke(app, ["init", str(tmp_path)])
 
         assert result.exit_code == 0

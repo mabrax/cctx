@@ -168,7 +168,7 @@ def validate_output(stdout: str, stderr: str, expected: dict[str, Any]) -> list[
 def run_test_case(
     test_case: dict[str, Any],
     work_dir: Path,
-    lctx_project_dir: Path,
+    cctx_project_dir: Path,
     verbose: bool = False,
 ) -> TestResult:
     """Execute a single test case and validate results.
@@ -176,7 +176,7 @@ def run_test_case(
     Args:
         test_case: Test case dictionary from YAML
         work_dir: Working directory for the test (fixture location)
-        lctx_project_dir: Path to the lctx project for uv run
+        cctx_project_dir: Path to the cctx project for uv run
         verbose: Whether to show detailed output
 
     Returns:
@@ -198,7 +198,7 @@ def run_test_case(
             timeout=30,
             env={
                 **dict(__import__("os").environ),
-                "LCTX_PROJECT_DIR": str(lctx_project_dir),
+                "CCTX_PROJECT_DIR": str(cctx_project_dir),
             },
         )
         stdout = result.stdout
@@ -362,7 +362,7 @@ Examples:
     eval_dir = get_eval_dir()
     test_cases_dir = eval_dir / "test-cases"
     fixtures_dir = eval_dir / "fixtures"
-    lctx_project_dir = eval_dir.parent.parent  # lctx/ directory
+    cctx_project_dir = eval_dir.parent.parent  # cctx/ directory
 
     # Validate directories exist
     if not test_cases_dir.exists():
@@ -427,7 +427,7 @@ Examples:
                         print_result(results[-1], args.verbose)
                     continue
 
-                result = run_test_case(tc, work_dir, lctx_project_dir, args.verbose)
+                result = run_test_case(tc, work_dir, cctx_project_dir, args.verbose)
                 results.append(result)
 
                 if not args.json:

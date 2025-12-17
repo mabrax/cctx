@@ -5,10 +5,10 @@ Regenerates the dependency graph from the knowledge database.
 
 from __future__ import annotations
 
-from lctx.database import ContextDB
-from lctx.fixers.base import BaseFixer, FixResult
-from lctx.graph import generate_graph, save_graph
-from lctx.validators.base import FixableIssue
+from cctx.database import ContextDB
+from cctx.fixers.base import BaseFixer, FixResult
+from cctx.graph import generate_graph, save_graph
+from cctx.validators.base import FixableIssue
 
 
 class GraphFixer(BaseFixer):
@@ -43,7 +43,7 @@ class GraphFixer(BaseFixer):
                 success=False,
                 message=(
                     f"Knowledge database not found at {self.db_path}. "
-                    "Initialize the project first with 'lctx init'."
+                    "Initialize the project first with 'cctx init'."
                 ),
             )
 
@@ -53,7 +53,7 @@ class GraphFixer(BaseFixer):
                 success=False,
                 message=(
                     f".ctx directory does not exist at {ctx_dir}. "
-                    "Initialize the project first with 'lctx init'."
+                    "Initialize the project first with 'cctx init'."
                 ),
             )
 

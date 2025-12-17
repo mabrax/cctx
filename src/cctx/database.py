@@ -18,7 +18,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
-from lctx.schema import init_database
+from cctx.schema import init_database
 
 if TYPE_CHECKING:
     from types import TracebackType

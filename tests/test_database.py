@@ -1,4 +1,4 @@
-"""Tests for lctx.database module."""
+"""Tests for cctx.database module."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from lctx.database import (
+from cctx.database import (
     ConnectionError,
     ContextDB,
     DatabaseError,

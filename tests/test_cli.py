@@ -1,4 +1,4 @@
-"""Tests for lctx CLI commands."""
+"""Tests for cctx CLI commands."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-from lctx.cli import app
+from cctx.cli import app
 
 runner = CliRunner()
 
@@ -18,7 +18,7 @@ def test_version() -> None:
     """Test --version flag shows version."""
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "lctx version" in result.stdout
+    assert "cctx version" in result.stdout
 
 
 def test_help() -> None:
@@ -485,7 +485,7 @@ class TestAddSystemCommand:
             assert result.exit_code == 0
 
             # Check the generated name in knowledge.db
-            from lctx.database import ContextDB
+            from cctx.database import ContextDB
             db_path = tmp_path / ".ctx" / "knowledge.db"
             with ContextDB(db_path, auto_init=False) as db:
                 rows = db.fetchall("SELECT path, name FROM systems")
@@ -691,8 +691,8 @@ class TestListCommand:
         try:
             os.chdir(tmp_path)
             # Add a system to database
-            from lctx.crud import create_system
-            from lctx.database import ContextDB
+            from cctx.crud import create_system
+            from cctx.database import ContextDB
 
             db_path = tmp_path / ".ctx" / "knowledge.db"
             with ContextDB(db_path, auto_init=False) as db, db.transaction():
@@ -724,8 +724,8 @@ class TestListCommand:
         try:
             os.chdir(tmp_path)
             # Add an ADR to database
-            from lctx.adr_crud import create_adr
-            from lctx.database import ContextDB
+            from cctx.adr_crud import create_adr
+            from cctx.database import ContextDB
 
             db_path = tmp_path / ".ctx" / "knowledge.db"
             with ContextDB(db_path, auto_init=False) as db, db.transaction():
@@ -789,8 +789,8 @@ class TestListCommand:
         try:
             os.chdir(tmp_path)
             # Add a system
-            from lctx.crud import create_system
-            from lctx.database import ContextDB
+            from cctx.crud import create_system
+            from cctx.database import ContextDB
 
             db_path = tmp_path / ".ctx" / "knowledge.db"
             with ContextDB(db_path, auto_init=False) as db, db.transaction():
@@ -1048,7 +1048,7 @@ class TestDoctorCommand:
         system_path = tmp_path / "src" / "systems" / "auth"
         ctx_path = system_path / ".ctx"
         ctx_path.mkdir(parents=True, exist_ok=True)
-        
+
         snapshot_content = """# Auth System
 
 ## Files
@@ -1062,7 +1062,7 @@ class TestDoctorCommand:
         monkeypatch.chdir(tmp_path)
         # Use --verbose to ensure non-fixable issues are listed
         result = runner.invoke(app, ["doctor", "--verbose"])
-        
+
         # Should have exit code 1 due to issues remaining
         assert result.exit_code == 1
         # Should report the issue

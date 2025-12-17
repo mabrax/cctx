@@ -1,4 +1,4 @@
-"""CLI utility functions for lctx.
+"""CLI utility functions for cctx.
 
 Provides helper functions for:
 - Config wiring: Extracting Typer CLI options and passing to load_config
@@ -14,7 +14,7 @@ from typing import Any, Literal, NoReturn
 
 import typer
 
-from lctx.config import LctxConfig, load_config
+from cctx.config import CctxConfig, load_config
 
 # Type aliases for status checking
 CtxStatus = Literal["missing", "partial", "complete"]
@@ -232,7 +232,7 @@ def wire_config(
     systems_dir: str | None = None,
     graph_name: str | None = None,
     start_dir: Path | None = None,
-) -> LctxConfig:
+) -> CctxConfig:
     """Wire CLI options to load_config with appropriate overrides.
 
     This helper extracts common CLI options and passes them to load_config
@@ -246,7 +246,7 @@ def wire_config(
         start_dir: Directory to start searching for config files.
 
     Returns:
-        Fully resolved LctxConfig instance.
+        Fully resolved CctxConfig instance.
 
     Raises:
         typer.Exit: If configuration is invalid.
@@ -268,8 +268,8 @@ def wire_config(
         error(f"Invalid configuration: {e}", exit_code=EXIT_USER_ERROR)
 
 
-def get_config_from_context(ctx: typer.Context) -> LctxConfig:
-    """Get LctxConfig from Typer context if available.
+def get_config_from_context(ctx: typer.Context) -> CctxConfig:
+    """Get CctxConfig from Typer context if available.
 
     This helper retrieves the config object that was stored in the
     Typer context by a callback function.
@@ -278,18 +278,18 @@ def get_config_from_context(ctx: typer.Context) -> LctxConfig:
         ctx: The Typer context object.
 
     Returns:
-        The LctxConfig instance from context.
+        The CctxConfig instance from context.
 
     Raises:
         typer.Exit: If no config is found in context.
     """
     config = ctx.obj
-    if not isinstance(config, LctxConfig):
+    if not isinstance(config, CctxConfig):
         error(
             "Configuration not initialized. This is a bug in the CLI.",
             exit_code=EXIT_SYSTEM_ERROR,
         )
-    # At this point, mypy knows config is LctxConfig because error() is NoReturn
+    # At this point, mypy knows config is CctxConfig because error() is NoReturn
     return config
 
 
@@ -312,7 +312,7 @@ def ctx_dir_option() -> Any:
         "--ctx-dir",
         "-c",
         help="Override context directory name (default: .ctx).",
-        envvar="LCTX_CTX_DIR",
+        envvar="CCTX_CTX_DIR",
     )
 
 
@@ -326,7 +326,7 @@ def db_name_option() -> Any:
         None,
         "--db-name",
         help="Override database file name (default: knowledge.db).",
-        envvar="LCTX_DB_NAME",
+        envvar="CCTX_DB_NAME",
     )
 
 
@@ -341,7 +341,7 @@ def systems_dir_option() -> Any:
         "--systems-dir",
         "-s",
         help="Override systems directory path (default: src/systems).",
-        envvar="LCTX_SYSTEMS_DIR",
+        envvar="CCTX_SYSTEMS_DIR",
     )
 
 
@@ -355,7 +355,7 @@ def graph_name_option() -> Any:
         None,
         "--graph-name",
         help="Override graph file name (default: graph.json).",
-        envvar="LCTX_GRAPH_NAME",
+        envvar="CCTX_GRAPH_NAME",
     )
 
 

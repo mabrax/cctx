@@ -11,7 +11,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
-from lctx.database import ContextDB
+from cctx.database import ContextDB
 
 
 def _validate_id(id: str, field_name: str = "id") -> None:

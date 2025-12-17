@@ -1,1 +1,1 @@
-"""Tests for lctx CLI tool."""
+"""Tests for cctx CLI tool."""

@@ -1,7 +1,7 @@
-"""Configuration management for lctx CLI tool.
+"""Configuration management for cctx CLI tool.
 
 Handles configuration loading from multiple sources with precedence:
-CLI args > environment variables > .lctxrc > pyproject.toml > defaults
+CLI args > environment variables > .cctxrc > pyproject.toml > defaults
 """
 
 from __future__ import annotations
@@ -20,8 +20,8 @@ else:
 
 
 @dataclass
-class LctxConfig:
-    """Configuration for the lctx CLI tool.
+class CctxConfig:
+    """Configuration for the cctx CLI tool.
 
     Attributes:
         ctx_dir: Name of the context directory (default: ".ctx")
@@ -116,12 +116,12 @@ def _get_config_field_names() -> set[str]:
     """Get the set of valid configuration field names.
 
     Returns:
-        Set of field names from LctxConfig.
+        Set of field names from CctxConfig.
     """
-    return {f.name for f in fields(LctxConfig)}
+    return {f.name for f in fields(CctxConfig)}
 
 
-def find_config_file(filename: str = ".lctxrc", start_dir: Path | None = None) -> Path | None:
+def find_config_file(filename: str = ".cctxrc", start_dir: Path | None = None) -> Path | None:
     """Find a configuration file by traversing up the directory tree.
 
     Searches for the specified file starting from start_dir (or current directory)
@@ -167,16 +167,16 @@ def _load_toml_file(path: Path) -> dict[str, Any]:
         return result
 
 
-def _load_from_lctxrc(start_dir: Path | None = None) -> dict[str, Any]:
-    """Load configuration from .lctxrc file.
+def _load_from_cctxrc(start_dir: Path | None = None) -> dict[str, Any]:
+    """Load configuration from .cctxrc file.
 
     Args:
         start_dir: Directory to start searching from.
 
     Returns:
-        Dictionary containing configuration from .lctxrc, or empty dict if not found.
+        Dictionary containing configuration from .cctxrc, or empty dict if not found.
     """
-    config_path = find_config_file(".lctxrc", start_dir)
+    config_path = find_config_file(".cctxrc", start_dir)
     if config_path is None:
         return {}
 
@@ -190,7 +190,7 @@ def _load_from_lctxrc(start_dir: Path | None = None) -> dict[str, Any]:
 
 
 def _load_from_pyproject(start_dir: Path | None = None) -> dict[str, Any]:
-    """Load configuration from pyproject.toml [tool.lctx] section.
+    """Load configuration from pyproject.toml [tool.cctx] section.
 
     Args:
         start_dir: Directory to start searching from.
@@ -205,11 +205,11 @@ def _load_from_pyproject(start_dir: Path | None = None) -> dict[str, Any]:
     try:
         data = _load_toml_file(config_path)
         tool_section = data.get("tool", {})
-        lctx_section = tool_section.get("lctx", {})
+        cctx_section = tool_section.get("cctx", {})
 
         # Filter to only valid config fields
         valid_fields = _get_config_field_names()
-        return {k: v for k, v in lctx_section.items() if k in valid_fields}
+        return {k: v for k, v in cctx_section.items() if k in valid_fields}
     except (tomllib.TOMLDecodeError, OSError):
         return {}
 
@@ -217,17 +217,17 @@ def _load_from_pyproject(start_dir: Path | None = None) -> dict[str, Any]:
 def _load_from_env() -> dict[str, Any]:
     """Load configuration from environment variables.
 
-    Environment variables are prefixed with LCTX_ and use uppercase names.
-    For example: LCTX_CTX_DIR, LCTX_SYSTEMS_DIR, LCTX_DB_NAME, LCTX_GRAPH_NAME
+    Environment variables are prefixed with CCTX_ and use uppercase names.
+    For example: CCTX_CTX_DIR, CCTX_SYSTEMS_DIR, CCTX_DB_NAME, CCTX_GRAPH_NAME
 
     Returns:
         Dictionary containing configuration from environment variables.
     """
     env_mapping = {
-        "LCTX_CTX_DIR": "ctx_dir",
-        "LCTX_SYSTEMS_DIR": "systems_dir",
-        "LCTX_DB_NAME": "db_name",
-        "LCTX_GRAPH_NAME": "graph_name",
+        "CCTX_CTX_DIR": "ctx_dir",
+        "CCTX_SYSTEMS_DIR": "systems_dir",
+        "CCTX_DB_NAME": "db_name",
+        "CCTX_GRAPH_NAME": "graph_name",
     }
 
     result: dict[str, Any] = {}
@@ -261,15 +261,15 @@ def _merge_configs(*configs: dict[str, Any]) -> dict[str, Any]:
 def load_config(
     cli_overrides: dict[str, Any] | None = None,
     start_dir: Path | None = None,
-) -> LctxConfig:
+) -> CctxConfig:
     """Load configuration with full precedence chain.
 
     Loads configuration from multiple sources and merges them with the following
     precedence (highest to lowest):
     1. CLI arguments (cli_overrides)
-    2. Environment variables (LCTX_*)
-    3. .lctxrc file
-    4. pyproject.toml [tool.lctx] section
+    2. Environment variables (CCTX_*)
+    3. .cctxrc file
+    4. pyproject.toml [tool.cctx] section
     5. Default values
 
     Args:
@@ -277,14 +277,14 @@ def load_config(
         start_dir: Directory to start searching for config files.
 
     Returns:
-        Fully resolved LctxConfig instance.
+        Fully resolved CctxConfig instance.
 
     Raises:
         ValueError: If the resulting configuration is invalid.
     """
     # Load from each source (in order of increasing precedence)
     pyproject_config = _load_from_pyproject(start_dir)
-    lctxrc_config = _load_from_lctxrc(start_dir)
+    cctxrc_config = _load_from_cctxrc(start_dir)
     env_config = _load_from_env()
     cli_config = cli_overrides or {}
 
@@ -295,16 +295,16 @@ def load_config(
     # Merge all configurations
     merged = _merge_configs(
         pyproject_config,
-        lctxrc_config,
+        cctxrc_config,
         env_config,
         cli_config,
     )
 
     # Create config instance (defaults are applied by the dataclass)
-    return LctxConfig(**merged)
+    return CctxConfig(**merged)
 
 
-def validate_paths_exist(config: LctxConfig, base_path: Path | None = None) -> list[str]:
+def validate_paths_exist(config: CctxConfig, base_path: Path | None = None) -> list[str]:
     """Validate that configured paths exist.
 
     This is an optional validation that checks if the configured directories

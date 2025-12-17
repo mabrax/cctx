@@ -57,7 +57,7 @@ fixtures/
 ```python
 from pathlib import Path
 
-fixture_path = Path("lctx/plugin/eval/fixtures/healthy-project")
+fixture_path = Path("cctx/plugin/eval/fixtures/healthy-project")
 result = validator.validate(fixture_path)
 assert result.status == "PASS"
 assert len(result.errors) == 0
@@ -67,7 +67,7 @@ assert len(result.warnings) == 0
 ### Testing Error Detection
 
 ```python
-fixture_path = Path("lctx/plugin/eval/fixtures/unhealthy-project")
+fixture_path = Path("cctx/plugin/eval/fixtures/unhealthy-project")
 result = validator.validate(fixture_path)
 assert result.status == "FAIL"
 assert "orphaned" in str(result.errors).lower()
@@ -77,7 +77,7 @@ assert "stale" in str(result.warnings).lower()
 ### Testing Initialization
 
 ```python
-fixture_path = Path("lctx/plugin/eval/fixtures/empty-project")
+fixture_path = Path("cctx/plugin/eval/fixtures/empty-project")
 result = init_command.run(fixture_path)
 assert (fixture_path / ".ctx").exists()
 assert (fixture_path / ".ctx" / "knowledge.db").exists()
@@ -86,7 +86,7 @@ assert (fixture_path / ".ctx" / "knowledge.db").exists()
 ### Testing Incremental Documentation
 
 ```python
-fixture_path = Path("lctx/plugin/eval/fixtures/partial-project")
+fixture_path = Path("cctx/plugin/eval/fixtures/partial-project")
 result = validator.validate(fixture_path)
 assert result.status == "FAIL"
 assert "missing" in str(result.errors).lower()
@@ -99,20 +99,20 @@ assert result.status == "PASS"
 ## File Locations for Test References
 
 **Healthy Project:**
-- `lctx/plugin/eval/fixtures/healthy-project/.ctx/knowledge.db`
-- `lctx/plugin/eval/fixtures/healthy-project/.ctx/systems/example/.ctx/snapshot.md`
+- `cctx/plugin/eval/fixtures/healthy-project/.ctx/knowledge.db`
+- `cctx/plugin/eval/fixtures/healthy-project/.ctx/systems/example/.ctx/snapshot.md`
 
 **Unhealthy Project:**
-- `lctx/plugin/eval/fixtures/unhealthy-project/.ctx/knowledge.db` (2 systems, 1 orphan ADR)
-- `lctx/plugin/eval/fixtures/unhealthy-project/.ctx/graph.json` (stale: 2025-06-01)
+- `cctx/plugin/eval/fixtures/unhealthy-project/.ctx/knowledge.db` (2 systems, 1 orphan ADR)
+- `cctx/plugin/eval/fixtures/unhealthy-project/.ctx/graph.json` (stale: 2025-06-01)
 
 **Empty Project:**
-- `lctx/plugin/eval/fixtures/empty-project/` (no .ctx/)
+- `cctx/plugin/eval/fixtures/empty-project/` (no .ctx/)
 
 **Partial Project:**
-- `lctx/plugin/eval/fixtures/partial-project/.ctx/knowledge.db` (2 systems)
-- `lctx/plugin/eval/fixtures/partial-project/src/core/` (no docs)
-- `lctx/plugin/eval/fixtures/partial-project/src/systems/auth/` (no docs)
+- `cctx/plugin/eval/fixtures/partial-project/.ctx/knowledge.db` (2 systems)
+- `cctx/plugin/eval/fixtures/partial-project/src/core/` (no docs)
+- `cctx/plugin/eval/fixtures/partial-project/src/systems/auth/` (no docs)
 
 ## Database Contents
 
@@ -206,5 +206,5 @@ For updates, see VALIDATION_NOTES.md fixture refresh dates.
 
 - [README.md](README.md) - Detailed fixture descriptions
 - [VALIDATION_NOTES.md](VALIDATION_NOTES.md) - Expected validator behavior
-- [lctx/src/lctx/data/schema.sql](../../src/lctx/data/schema.sql) - Database schema
-- [lctx/src/lctx/templates/](../../src/lctx/templates/) - Documentation templates
+- [cctx/src/cctx/data/schema.sql](../../src/cctx/data/schema.sql) - Database schema
+- [cctx/src/cctx/templates/](../../src/cctx/templates/) - Documentation templates

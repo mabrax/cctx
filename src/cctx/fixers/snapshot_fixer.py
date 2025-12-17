@@ -6,12 +6,10 @@ a system's .ctx directory.
 
 from __future__ import annotations
 
-from pathlib import Path
-
-from lctx.fixers.base import BaseFixer, FixResult
-from lctx.fixers.utils import derive_system_name
-from lctx.template_manager import render_template
-from lctx.validators.base import FixableIssue
+from cctx.fixers.base import BaseFixer, FixResult
+from cctx.fixers.utils import derive_system_name
+from cctx.template_manager import render_template
+from cctx.validators.base import FixableIssue
 
 
 class SnapshotFixer(BaseFixer):

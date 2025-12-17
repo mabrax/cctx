@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to lctx will be documented in this file.
+All notable changes to cctx will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -22,19 +22,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ContextDB connection manager with transaction support
 - CRUD operations for systems and ADRs
 - Graph generation and analysis (BFS traversal, cycle detection, topological sort)
-- Configuration precedence chain (CLI > env > .lctxrc > pyproject.toml > defaults)
+- Configuration precedence chain (CLI > env > .cctxrc > pyproject.toml > defaults)
 - Template manager with 5 templates (snapshot, constraints, decisions, debt, adr)
 - Atomic scaffolding for .ctx/ directories
 
 #### Phase 3: CLI Commands
-- `lctx init` - Initialize .ctx/ directory structure
-- `lctx health` - Run health checks with 4 validators
-- `lctx status` - Show Living Context status summary
-- `lctx sync` - Identify stale documentation
-- `lctx validate` - Pre-commit validation checks
-- `lctx add-system` - Create .ctx/ for a system with DB registration
-- `lctx adr` - Create ADR from template with DB registration
-- `lctx list` - List systems, ADRs, or debt items
+- `cctx init` - Initialize .ctx/ directory structure
+- `cctx health` - Run health checks with 4 validators
+- `cctx status` - Show Living Context status summary
+- `cctx sync` - Identify stale documentation
+- `cctx validate` - Pre-commit validation checks
+- `cctx add-system` - Create .ctx/ for a system with DB registration
+- `cctx adr` - Create ADR from template with DB registration
+- `cctx list` - List systems, ADRs, or debt items
 
 #### Phase 4: Validation Engine
 - SnapshotValidator: File existence, dependency accuracy
@@ -49,8 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Living Context skill with 15+ trigger words
 - Pre-write hook for .ctx/ edit warnings
 - Evaluation system with rubric, fixtures, and 46 test cases
-- `lctx plugin install` - Install plugin to project or user scope
-- `lctx plugin eval` - Run plugin evaluation tests
+- `cctx plugin install` - Install plugin to project or user scope
+- `cctx plugin eval` - Run plugin evaluation tests
 
 ### Technical Details
 

@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import re
 
-from lctx.adr_crud import create_adr, get_adr
-from lctx.database import ContextDB
-from lctx.fixers.base import BaseFixer, FixResult
-from lctx.validators.base import FixableIssue
+from cctx.adr_crud import create_adr, get_adr
+from cctx.database import ContextDB
+from cctx.fixers.base import BaseFixer, FixResult
+from cctx.validators.base import FixableIssue
 
 
 class AdrFixer(BaseFixer):

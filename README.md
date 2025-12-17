@@ -1,4 +1,4 @@
-# lctx - Living Context CLI Tool
+# cctx - Living Context CLI Tool
 
 Co-located documentation that stays synchronized with code. No more archaeological digs through outdated wikis--context lives where the code lives.
 
@@ -18,28 +18,28 @@ When documentation lives with code, it gets updated with code.
 
 ```bash
 # From source (development)
-cd lctx
+cd cctx
 uv sync --dev
-uv run lctx --help
+uv run cctx --help
 ```
 
 ## Quick Start
 
 ```bash
 # Initialize Living Context in your project
-lctx init
+cctx init
 
 # Add a system to track
-lctx add-system src/systems/auth
+cctx add-system src/systems/auth
 
 # Check documentation health
-lctx health
+cctx health
 
 # Create an Architecture Decision Record
-lctx adr "Use JWT for authentication"
+cctx adr "Use JWT for authentication"
 
 # Show status summary
-lctx status
+cctx status
 ```
 
 ## Commands
@@ -48,16 +48,16 @@ lctx status
 
 | Command | Description |
 |---------|-------------|
-| `lctx init [path] [--force]` | Initialize `.ctx/` and install Claude Code plugin |
-| `lctx health [--deep]` | Run health checks on documentation |
-| `lctx doctor [--fix] [--dry-run]` | Find and fix common issues |
-| `lctx status` | Show Living Context status summary |
-| `lctx sync [--dry-run]` | Identify stale documentation |
-| `lctx validate` | Run pre-commit validation checks |
-| `lctx add-system <path>` | Create `.ctx/` for a system/module |
-| `lctx adr <title>` | Create new Architecture Decision Record |
-| `lctx list [systems\|adrs\|debt]` | List registered entities |
-| `lctx eval [--command] [--case]` | Run plugin evaluation tests |
+| `cctx init [path] [--force]` | Initialize `.ctx/` and install Claude Code plugin |
+| `cctx health [--deep]` | Run health checks on documentation |
+| `cctx doctor [--fix] [--dry-run]` | Find and fix common issues |
+| `cctx status` | Show Living Context status summary |
+| `cctx sync [--dry-run]` | Identify stale documentation |
+| `cctx validate` | Run pre-commit validation checks |
+| `cctx add-system <path>` | Create `.ctx/` for a system/module |
+| `cctx adr <title>` | Create new Architecture Decision Record |
+| `cctx list [systems\|adrs\|debt]` | List registered entities |
+| `cctx eval [--command] [--case]` | Run plugin evaluation tests |
 
 ### Common Options
 
@@ -68,7 +68,7 @@ All commands support:
 
 ## Directory Structure
 
-After initialization, lctx creates:
+After initialization, cctx creates:
 
 ```
 .ctx/
@@ -96,7 +96,7 @@ src/systems/<name>/.ctx/
 
 ## Validators
 
-`lctx health` runs four validators:
+`cctx health` runs four validators:
 
 | Validator | Checks |
 |-----------|--------|
@@ -113,16 +113,16 @@ The `doctor` command finds issues and can automatically fix many of them:
 
 ```bash
 # See what issues exist and which can be fixed
-lctx doctor
+cctx doctor
 
 # Preview what fixes would be applied (no changes made)
-lctx doctor --dry-run
+cctx doctor --dry-run
 
 # Apply all available fixes
-lctx doctor --fix
+cctx doctor --fix
 
 # Verbose output with detailed information
-lctx doctor --fix --verbose
+cctx doctor --fix --verbose
 ```
 
 ### Available Fixes
@@ -150,24 +150,24 @@ lctx doctor --fix --verbose
 
 ```bash
 # 1. Check health to see all issues
-lctx health
+cctx health
 
 # 2. See which issues can be auto-fixed
-lctx doctor
+cctx doctor
 
 # 3. Preview the fixes
-lctx doctor --dry-run
+cctx doctor --dry-run
 
 # 4. Apply the fixes
-lctx doctor --fix
+cctx doctor --fix
 
 # 5. Verify health is now clean
-lctx health
+cctx health
 ```
 
 ## Claude Code Integration
 
-The Claude Code plugin is automatically installed when you run `lctx init`. The plugin provides:
+The Claude Code plugin is automatically installed when you run `cctx init`. The plugin provides:
 
 - **8 slash commands** (`/context-init`, `/context-health`, etc.)
 - **Living Context skill** (triggered by context-related questions)
@@ -181,7 +181,7 @@ If you need to reinstall the plugin or reset your context:
 
 ```bash
 # Reinitialize everything (overwrites existing files)
-lctx init --force
+cctx init --force
 ```
 
 ### Plugin Evaluation
@@ -190,16 +190,16 @@ Test the plugin with the built-in eval system:
 
 ```bash
 # Run all tests
-lctx eval
+cctx eval
 
 # Test specific command
-lctx eval --command health
+cctx eval --command health
 
 # Run specific test case
-lctx eval --case "health-deep-check"
+cctx eval --case "health-deep-check"
 
 # JSON output for CI
-lctx eval --json
+cctx eval --json
 ```
 
 ## Workflow
@@ -215,7 +215,7 @@ lctx eval --json
 1. Update `snapshot.md` if API changed
 2. Add ADR if architectural decision was made
 3. Update `debt.md` if shortcuts were taken
-4. Run `lctx health` to verify
+4. Run `cctx health` to verify
 
 ### Pre-Commit Hook
 
@@ -223,7 +223,7 @@ Add to `.git/hooks/pre-commit`:
 
 ```bash
 #!/bin/bash
-lctx validate
+cctx validate
 ```
 
 Or use the plugin's hook which runs automatically.
@@ -234,8 +234,8 @@ If you have an existing `.ctx/` structure from the embedded Plantasia implementa
 
 1. **Database is compatible** - `knowledge.db` schema matches
 2. **Templates may differ** - Compare and merge if customized
-3. **Install CLI** - `uv add lctx` or install from source
-4. **Verify** - Run `lctx health` to check compatibility
+3. **Install CLI** - `uv add cctx` or install from source
+4. **Verify** - Run `cctx health` to check compatibility
 
 Key differences:
 - CLI is standalone (not project-specific)
@@ -244,14 +244,14 @@ Key differences:
 
 ## Configuration
 
-lctx looks for configuration in order:
+cctx looks for configuration in order:
 1. CLI flags (`--ctx-dir`)
 2. Environment variables (`LCTX_CTX_DIR`)
-3. `.lctxrc` file in project root
-4. `pyproject.toml` `[tool.lctx]` section
+3. `.cctxrc` file in project root
+4. `pyproject.toml` `[tool.cctx]` section
 5. Defaults (`.ctx`)
 
-Example `.lctxrc`:
+Example `.cctxrc`:
 
 ```toml
 ctx_dir = ".context"
@@ -263,11 +263,11 @@ systems_dir = "src/modules"
 ```bash
 # Clone and setup
 git clone <repo>
-cd lctx
+cd cctx
 uv sync --dev
 
 # Run the CLI
-uv run lctx --help
+uv run cctx --help
 
 # Run tests
 uv run pytest

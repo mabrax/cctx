@@ -5,7 +5,7 @@ argument-hint: "[--dry-run]"
 
 Check for and report stale documentation that needs updating.
 
-Run: `lctx sync $ARGUMENTS`
+Run: `cctx sync $ARGUMENTS`
 
 Uses the freshness checker to identify:
 - Stale snapshot.md files

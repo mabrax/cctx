@@ -13,14 +13,14 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Literal
 
-from lctx.validators.base import (
+from cctx.validators.base import (
     BaseValidator,
     FixableIssue,
     ValidationIssue,
     ValidatorResult,
 )
-from lctx.validators.git_helper import get_file_mtime_fs, get_file_mtime_git
-from lctx.validators.path_filter import find_ctx_directories
+from cctx.validators.git_helper import get_file_mtime_fs, get_file_mtime_git
+from cctx.validators.path_filter import find_ctx_directories
 
 
 class FreshnessChecker(BaseValidator):

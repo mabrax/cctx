@@ -13,15 +13,15 @@ import re
 from pathlib import Path
 from typing import Literal
 
-from lctx.adr_crud import get_adr, list_adrs
-from lctx.database import ContextDB
-from lctx.validators.base import (
+from cctx.adr_crud import get_adr, list_adrs
+from cctx.database import ContextDB
+from cctx.validators.base import (
     BaseValidator,
     FixableIssue,
     ValidationIssue,
     ValidatorResult,
 )
-from lctx.validators.path_filter import find_ctx_directories
+from cctx.validators.path_filter import find_ctx_directories
 
 
 class AdrValidator(BaseValidator):

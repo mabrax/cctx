@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from lctx.fixers import (
+from cctx.fixers import (
     AdrFixer,
     BaseFixer,
     FixerRegistry,
@@ -17,9 +17,8 @@ from lctx.fixers import (
     SnapshotFixer,
     get_global_registry,
 )
-from lctx.schema import init_database
-from lctx.validators.base import FixableIssue
-
+from cctx.schema import init_database
+from cctx.validators.base import FixableIssue
 
 # -----------------------------------------------------------------------------
 # FixResult Tests
@@ -478,11 +477,11 @@ class TestMissingTemplateFileFixer:
 
     def test_valid_templates(self) -> None:
         """Test that valid templates are defined correctly."""
-        assert MissingTemplateFileFixer.VALID_TEMPLATES == {
+        assert {
             "constraints",
             "decisions",
             "debt",
-        }
+        } == MissingTemplateFileFixer.VALID_TEMPLATES
 
     def test_create_missing_template_file(self, tmp_path: Path) -> None:
         """Test creating a missing template file."""
@@ -716,8 +715,8 @@ Use JWT (JSON Web Tokens) for API authentication.
         assert "Registered" in result.message
 
         # Verify ADR is in database
-        from lctx.adr_crud import get_adr
-        from lctx.database import ContextDB
+        from cctx.adr_crud import get_adr
+        from cctx.database import ContextDB
 
         with ContextDB(db_path, auto_init=False) as db:
             adr = get_adr(db, "ADR-001")
@@ -743,18 +742,17 @@ Use JWT (JSON Web Tokens) for API authentication.
         db_path.parent.mkdir(parents=True, exist_ok=True)
         init_database(db_path)
 
-        from lctx.adr_crud import create_adr
-        from lctx.database import ContextDB
+        from cctx.adr_crud import create_adr
+        from cctx.database import ContextDB
 
-        with ContextDB(db_path, auto_init=False) as db:
-            with db.transaction():
-                create_adr(
-                    db,
-                    id="ADR-001",
-                    title="Pre-existing ADR",
-                    status="accepted",
-                    file_path="src/systems/auth/.ctx/adr/ADR-001.md",
-                )
+        with ContextDB(db_path, auto_init=False) as db, db.transaction():
+            create_adr(
+                db,
+                id="ADR-001",
+                title="Pre-existing ADR",
+                status="accepted",
+                file_path="src/systems/auth/.ctx/adr/ADR-001.md",
+            )
 
         # Create issue
         issue = FixableIssue(
@@ -908,8 +906,8 @@ Use JWT (JSON Web Tokens) for API authentication.
         assert result.success is True
 
         # Verify defaults were used
-        from lctx.adr_crud import get_adr
-        from lctx.database import ContextDB
+        from cctx.adr_crud import get_adr
+        from cctx.database import ContextDB
 
         with ContextDB(db_path, auto_init=False) as db:
             adr = get_adr(db, "ADR-002")
@@ -949,8 +947,8 @@ Use JWT (JSON Web Tokens) for API authentication.
 
         assert result.success is True
 
-        from lctx.adr_crud import get_adr
-        from lctx.database import ContextDB
+        from cctx.adr_crud import get_adr
+        from cctx.database import ContextDB
 
         with ContextDB(db_path, auto_init=False) as db:
             adr = get_adr(db, "ADR-003")

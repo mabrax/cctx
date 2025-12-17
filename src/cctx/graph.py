@@ -17,8 +17,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from lctx.crud import list_systems
-from lctx.database import ContextDB
+from cctx.crud import list_systems
+from cctx.database import ContextDB
 
 
 class GraphError(Exception):

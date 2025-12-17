@@ -59,14 +59,14 @@ def get_template(name: str) -> str:
         # Load the template file from the package resources
         if hasattr(importlib.resources, "files"):
             # Python 3.9+
-            templates_module = importlib.resources.files("lctx").joinpath("templates")
+            templates_module = importlib.resources.files("cctx").joinpath("templates")
             template_path = templates_module.joinpath(template_file)
             content = template_path.read_text(encoding="utf-8")
         else:
             # Fallback for older Python versions
             import pkgutil
 
-            raw_content = pkgutil.get_data("lctx.templates", template_file)
+            raw_content = pkgutil.get_data("cctx.templates", template_file)
             if raw_content is None:
                 raise FileNotFoundError(f"Cannot load template: {template_file}")
             content = raw_content.decode("utf-8")

@@ -9,8 +9,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from lctx.fixers.base import BaseFixer, FixResult
-from lctx.validators.base import FixableIssue
+from cctx.fixers.base import BaseFixer, FixResult
+from cctx.validators.base import FixableIssue
 
 if TYPE_CHECKING:
     pass
@@ -145,13 +145,13 @@ def _create_default_registry() -> FixerRegistry:
         A FixerRegistry populated with all built-in fixers.
     """
     # Import here to avoid circular imports
-    from lctx.fixers.adr_fixer import AdrFixer
-    from lctx.fixers.graph_fixer import GraphFixer
-    from lctx.fixers.scaffolding_fixer import (
+    from cctx.fixers.adr_fixer import AdrFixer
+    from cctx.fixers.graph_fixer import GraphFixer
+    from cctx.fixers.scaffolding_fixer import (
         MissingCtxDirFixer,
         MissingTemplateFileFixer,
     )
-    from lctx.fixers.snapshot_fixer import SnapshotFixer
+    from cctx.fixers.snapshot_fixer import SnapshotFixer
 
     registry = FixerRegistry()
     registry.register(SnapshotFixer)

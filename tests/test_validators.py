@@ -6,9 +6,9 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from lctx.database import ContextDB
-from lctx.schema import init_database
-from lctx.validators import (
+from cctx.database import ContextDB
+from cctx.schema import init_database
+from cctx.validators import (
     AdrValidator,
     AggregatedResult,
     DebtAuditor,
@@ -16,7 +16,7 @@ from lctx.validators import (
     SnapshotValidator,
     ValidationRunner,
 )
-from lctx.validators.base import ValidationIssue, ValidatorResult
+from cctx.validators.base import ValidationIssue, ValidatorResult
 
 # -----------------------------------------------------------------------------
 # Base Validator Tests
@@ -394,7 +394,7 @@ Status: accepted
         init_database(db_path)
 
         # Register ADR in database
-        from lctx.adr_crud import create_adr
+        from cctx.adr_crud import create_adr
 
         with ContextDB(db_path, auto_init=False) as db:
             create_adr(db, "ADR-001", "Use PostgreSQL", "accepted", ".ctx/adr/ADR-001-use-postgresql.md")
@@ -413,7 +413,7 @@ Status: accepted
         init_database(db_path)
 
         # Create ADR in DB but not on filesystem (needs transaction to persist)
-        from lctx.adr_crud import create_adr
+        from cctx.adr_crud import create_adr
 
         with ContextDB(db_path, auto_init=False) as db, db.transaction():
             create_adr(db, "ADR-999", "Missing ADR", "proposed", ".ctx/adr/ADR-999.md")
@@ -674,7 +674,7 @@ class TestHealthCommandWithValidators:
 
         from typer.testing import CliRunner
 
-        from lctx.cli import app
+        from cctx.cli import app
 
         runner = CliRunner()
 
@@ -700,7 +700,7 @@ class TestHealthCommandWithValidators:
 
         from typer.testing import CliRunner
 
-        from lctx.cli import app
+        from cctx.cli import app
 
         runner = CliRunner()
 

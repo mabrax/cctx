@@ -1,4 +1,4 @@
-"""Tests for lctx.crud module."""
+"""Tests for cctx.crud module."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from lctx.crud import (
+from cctx.crud import (
     add_dependency,
     create_system,
     delete_system,
@@ -20,7 +20,7 @@ from lctx.crud import (
     remove_dependency,
     update_system,
 )
-from lctx.database import ContextDB
+from cctx.database import ContextDB
 
 
 @pytest.fixture

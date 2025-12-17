@@ -1,4 +1,4 @@
-"""Tests for lctx CLI utility functions."""
+"""Tests for cctx CLI utility functions."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import pytest
 import typer
 from typer.testing import CliRunner
 
-from lctx.cli_utils import (
+from cctx.cli_utils import (
     EXIT_SUCCESS,
     EXIT_SYSTEM_ERROR,
     EXIT_USER_ERROR,
@@ -30,7 +30,7 @@ from lctx.cli_utils import (
     warning,
     wire_config,
 )
-from lctx.config import LctxConfig
+from cctx.config import CctxConfig
 
 # Default CliRunner - note that stderr is mixed into stdout by default
 runner = CliRunner()
@@ -356,7 +356,7 @@ class TestConfigWiring:
     @pytest.fixture
     def _clean_env(self) -> Generator[None, None, None]:
         """Fixture to clean up environment variables after test."""
-        env_vars = ["LCTX_CTX_DIR", "LCTX_SYSTEMS_DIR", "LCTX_DB_NAME", "LCTX_GRAPH_NAME"]
+        env_vars = ["CCTX_CTX_DIR", "CCTX_SYSTEMS_DIR", "CCTX_DB_NAME", "CCTX_GRAPH_NAME"]
         original_values: dict[str, str | None] = {}
 
         for var in env_vars:
@@ -441,17 +441,17 @@ class TestConfigWiring:
         assert "Invalid configuration" in result.output
 
     def test_wire_config_respects_file_config(self, tmp_path: Path, _clean_env: None) -> None:
-        """Test wire_config respects config from .lctxrc."""
-        lctxrc = tmp_path / ".lctxrc"
-        lctxrc.write_text('ctx_dir = ".from-file"\n')
+        """Test wire_config respects config from .cctxrc."""
+        cctxrc = tmp_path / ".cctxrc"
+        cctxrc.write_text('ctx_dir = ".from-file"\n')
 
         config = wire_config(start_dir=tmp_path)
         assert config.ctx_dir == ".from-file"
 
     def test_wire_config_cli_overrides_file(self, tmp_path: Path, _clean_env: None) -> None:
         """Test wire_config CLI overrides take precedence over file config."""
-        lctxrc = tmp_path / ".lctxrc"
-        lctxrc.write_text('ctx_dir = ".from-file"\n')
+        cctxrc = tmp_path / ".cctxrc"
+        cctxrc.write_text('ctx_dir = ".from-file"\n')
 
         config = wire_config(ctx_dir=".from-cli", start_dir=tmp_path)
         assert config.ctx_dir == ".from-cli"
@@ -459,7 +459,7 @@ class TestConfigWiring:
     def test_get_config_from_context_success(self) -> None:
         """Test get_config_from_context retrieves config from context."""
         app = typer.Typer()
-        expected_config = LctxConfig(ctx_dir=".test-ctx")
+        expected_config = CctxConfig(ctx_dir=".test-ctx")
 
         @app.callback()
         def callback(ctx: typer.Context) -> None:
@@ -583,7 +583,7 @@ class TestIntegration:
     @pytest.fixture
     def _clean_env(self) -> Generator[None, None, None]:
         """Fixture to clean up environment variables after test."""
-        env_vars = ["LCTX_CTX_DIR", "LCTX_SYSTEMS_DIR", "LCTX_DB_NAME", "LCTX_GRAPH_NAME"]
+        env_vars = ["CCTX_CTX_DIR", "CCTX_SYSTEMS_DIR", "CCTX_DB_NAME", "CCTX_GRAPH_NAME"]
         original_values: dict[str, str | None] = {}
 
         for var in env_vars:

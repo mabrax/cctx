@@ -150,19 +150,19 @@ WARNINGS:
 
 ```bash
 # Test healthy project
-validate /path/to/lctx/plugin/eval/fixtures/healthy-project/
+validate /path/to/cctx/plugin/eval/fixtures/healthy-project/
 # Expected: PASS
 
 # Test unhealthy project
-validate /path/to/lctx/plugin/eval/fixtures/unhealthy-project/
+validate /path/to/cctx/plugin/eval/fixtures/unhealthy-project/
 # Expected: FAIL (orphan, stale, missing, incomplete)
 
 # Test empty project
-validate /path/to/lctx/plugin/eval/fixtures/empty-project/
+validate /path/to/cctx/plugin/eval/fixtures/empty-project/
 # Expected: PASS or SKIP (no context to validate)
 
 # Test partial project
-validate /path/to/lctx/plugin/eval/fixtures/partial-project/
+validate /path/to/cctx/plugin/eval/fixtures/partial-project/
 # Expected: FAIL (missing documentation)
 ```
 

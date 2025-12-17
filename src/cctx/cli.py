@@ -16,8 +16,8 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from lctx import __version__
-from lctx.cli_utils import (
+from cctx import __version__
+from cctx.cli_utils import (
     EXIT_USER_ERROR,
     ProjectRootNotFoundError,
     check_ctx_status,
@@ -26,17 +26,17 @@ from lctx.cli_utils import (
     find_project_root,
     wire_config,
 )
-from lctx.fixers.base import FixResult
-from lctx.fixers.registry import get_global_registry
-from lctx.scaffolder import ScaffoldError, scaffold_project_ctx, scaffold_system_ctx
-from lctx.schema import init_database
-from lctx.validators.base import FixableIssue
+from cctx.fixers.base import FixResult
+from cctx.fixers.registry import get_global_registry
+from cctx.scaffolder import ScaffoldError, scaffold_project_ctx, scaffold_system_ctx
+from cctx.schema import init_database
+from cctx.validators.base import FixableIssue
 
 if TYPE_CHECKING:
-    from lctx.database import ContextDB
+    from cctx.database import ContextDB
 
 app = typer.Typer(
-    name="lctx",
+    name="cctx",
     help="Living Context CLI Tool - Co-located documentation that stays synchronized with code.",
     add_completion=False,
 )
@@ -88,7 +88,7 @@ def _exit_error(message: str, exit_code: int = EXIT_USER_ERROR) -> None:
 def version_callback(value: bool) -> None:
     """Print version and exit."""
     if value:
-        typer.echo(f"lctx version {__version__}")
+        typer.echo(f"cctx version {__version__}")
         raise typer.Exit()
 
 
@@ -199,7 +199,7 @@ def init(
         result["ctx"]["status"] = "partial"
         result["ctx"]["action"] = "skipped"
         result["ctx"]["missing"] = ctx_missing
-        msg = f".ctx/ exists but is incomplete (missing: {', '.join(ctx_missing)}). Run: lctx doctor --fix"
+        msg = f".ctx/ exists but is incomplete (missing: {', '.join(ctx_missing)}). Run: cctx doctor --fix"
         result["warnings"].append(msg)
         if not json_output:
             _output_warning(msg, quiet)
@@ -225,10 +225,10 @@ def init(
         plugin_src = _get_plugin_source_path()
         if plugin_src is None:
             result["plugin"]["status"] = "error"
-            result["plugin"]["error"] = "Plugin files not found. Ensure lctx is properly installed."
+            result["plugin"]["error"] = "Plugin files not found. Ensure cctx is properly installed."
             if json_output:
                 console.print_json(json.dumps(result))
-            _exit_error("Plugin files not found. Ensure lctx is properly installed.")
+            _exit_error("Plugin files not found. Ensure cctx is properly installed.")
             return  # unreachable, but helps mypy
 
         try:
@@ -251,7 +251,7 @@ def init(
         result["plugin"]["status"] = "partial"
         result["plugin"]["action"] = "skipped"
         result["plugin"]["missing"] = plugin_missing
-        msg = f"Plugin exists but is incomplete (missing: {', '.join(plugin_missing)}). Run: lctx doctor --fix"
+        msg = f"Plugin exists but is incomplete (missing: {', '.join(plugin_missing)}). Run: cctx doctor --fix"
         result["warnings"].append(msg)
         if not json_output:
             _output_warning(msg, quiet)
@@ -346,7 +346,7 @@ def health(
 
         # Run validators if basic checks pass
         if ctx_path.exists() and db_path.exists():
-            from lctx.validators import ValidationRunner
+            from cctx.validators import ValidationRunner
 
             runner = ValidationRunner(project_root, db_path)
             validation_result = runner.run_all(deep=deep)
@@ -472,9 +472,9 @@ def status(
         }
 
         if db_path.exists():
-            from lctx.adr_crud import list_adrs
-            from lctx.crud import list_systems
-            from lctx.database import ContextDB
+            from cctx.adr_crud import list_adrs
+            from cctx.crud import list_systems
+            from cctx.database import ContextDB
 
             with ContextDB(db_path, auto_init=False) as db:
                 # Count systems
@@ -560,15 +560,15 @@ def sync(
         }
 
         if not ctx_path.exists() or not db_path.exists():
-            result["error"] = "Context not initialized. Run 'lctx init' first."
+            result["error"] = "Context not initialized. Run 'cctx init' first."
             if json_output:
                 console.print_json(json.dumps(result))
             else:
-                _exit_error("Context not initialized. Run 'lctx init' first.")
+                _exit_error("Context not initialized. Run 'cctx init' first.")
             return
 
         # Run freshness checker to find stale docs
-        from lctx.validators import ValidationRunner
+        from cctx.validators import ValidationRunner
 
         runner = ValidationRunner(project_root, db_path)
         validation_result = runner.run_single("freshness")
@@ -612,7 +612,7 @@ def sync(
                     _output_info("To update stale documentation:", quiet)
                     _output_info("  1. Review each file listed above", quiet)
                     _output_info("  2. Update with current system state", quiet)
-                    _output_info("  3. Run 'lctx health' to verify", quiet)
+                    _output_info("  3. Run 'cctx health' to verify", quiet)
 
     except ProjectRootNotFoundError as e:
         if json_output:
@@ -682,7 +682,7 @@ def validate(
 
         # Run validators if basic checks pass
         if ctx_path.exists() and db_path.exists():
-            from lctx.validators import ValidationRunner
+            from cctx.validators import ValidationRunner
 
             runner = ValidationRunner(project_root, db_path)
             # Only run snapshot and adr validators for pre-commit (fast checks)
@@ -801,15 +801,15 @@ def doctor(
         # Check basic requirements
         if not ctx_path.exists() or not db_path.exists():
             result["success"] = False
-            result["error"] = "Context not initialized. Run 'lctx init' first."
+            result["error"] = "Context not initialized. Run 'cctx init' first."
             if json_output:
                 console.print_json(json.dumps(result))
             else:
-                _output_error("Context not initialized. Run 'lctx init' first.")
+                _output_error("Context not initialized. Run 'cctx init' first.")
             raise typer.Exit(code=EXIT_USER_ERROR)
 
         # Run all validators
-        from lctx.validators import ValidationRunner
+        from cctx.validators import ValidationRunner
 
         runner = ValidationRunner(project_root, db_path)
         validation_result = runner.run_all(deep=True)
@@ -1033,14 +1033,14 @@ def _doctor_print_results(
     elif dry_run:
         if fixable > 0:
             _output_info(
-                f"Run [bold]lctx doctor --fix[/bold] to apply {fixable} fix(es)"
+                f"Run [bold]cctx doctor --fix[/bold] to apply {fixable} fix(es)"
             )
     else:
         # Check mode
         if fixable > 0:
             _output_warning(
                 f"Found {fixable} fixable issue(s). "
-                f"Run [bold]lctx doctor --fix[/bold] to apply fixes"
+                f"Run [bold]cctx doctor --fix[/bold] to apply fixes"
             )
         if len(non_fixable_issues) > 0:
             _output_info(
@@ -1120,8 +1120,8 @@ def add_system(
             # Register system in database
             db_path = config.get_db_path(project_root)
             if db_path.exists():
-                from lctx.crud import create_system
-                from lctx.database import ContextDB
+                from cctx.crud import create_system
+                from cctx.database import ContextDB
 
                 with ContextDB(db_path, auto_init=False) as db, db.transaction():
                     try:
@@ -1236,7 +1236,7 @@ def adr(
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
         # Load and render template
-        from lctx.template_manager import get_template
+        from cctx.template_manager import get_template
 
         template_content = get_template("adr")
 
@@ -1261,8 +1261,8 @@ def adr(
         # Register ADR in database
         db_path = config.get_db_path(project_root)
         if db_path.exists():
-            from lctx.adr_crud import create_adr
-            from lctx.database import ContextDB
+            from cctx.adr_crud import create_adr
+            from cctx.database import ContextDB
 
             with ContextDB(db_path, auto_init=False) as db, db.transaction():
                 try:
@@ -1325,9 +1325,9 @@ def list_entities(
     """List registered entities (systems, ADRs, or debt items).
 
     Usage:
-      lctx list systems   - List all registered systems
-      lctx list adrs      - List all Architecture Decision Records
-      lctx list debt      - List technical debt items (placeholder)
+      cctx list systems   - List all registered systems
+      cctx list adrs      - List all Architecture Decision Records
+      cctx list debt      - List technical debt items (placeholder)
     """
     entity = entity.lower()
     valid_entities = ["systems", "adrs", "debt"]
@@ -1341,9 +1341,9 @@ def list_entities(
         db_path = config.get_db_path(project_root)
 
         if not db_path.exists():
-            _exit_error(f"Database not found: {db_path}. Run 'lctx init' first.")
+            _exit_error(f"Database not found: {db_path}. Run 'cctx init' first.")
 
-        from lctx.database import ContextDB
+        from cctx.database import ContextDB
 
         with ContextDB(db_path, auto_init=False) as db:
             if entity == "systems":
@@ -1361,7 +1361,7 @@ def list_entities(
 
 def _list_systems(db: ContextDB, json_output: bool, quiet: bool) -> None:
     """List all systems."""
-    from lctx.crud import list_systems
+    from cctx.crud import list_systems
 
     systems = list_systems(db)
 
@@ -1395,7 +1395,7 @@ def _list_systems(db: ContextDB, json_output: bool, quiet: bool) -> None:
 
 def _list_adrs(db: ContextDB, json_output: bool, quiet: bool) -> None:
     """List all ADRs."""
-    from lctx.adr_crud import list_adrs
+    from cctx.adr_crud import list_adrs
 
     adrs = list_adrs(db)
 
@@ -1470,7 +1470,7 @@ def _get_plugin_source_path() -> Path | None:
     # Try importlib.resources for installed package
     try:
         if hasattr(importlib.resources, "files"):
-            pkg_files = importlib.resources.files("lctx")
+            pkg_files = importlib.resources.files("cctx")
             plugin_path = pkg_files.joinpath("plugin")
             # Check if it exists and has content
             if hasattr(plugin_path, "is_dir") and plugin_path.is_dir():
@@ -1478,11 +1478,11 @@ def _get_plugin_source_path() -> Path | None:
     except (TypeError, AttributeError, FileNotFoundError):
         pass
 
-    # Fallback: Check for development layout (lctx/plugin relative to package)
+    # Fallback: Check for development layout (cctx/plugin relative to package)
     try:
-        pkg_files = importlib.resources.files("lctx")
+        pkg_files = importlib.resources.files("cctx")
         pkg_path = Path(str(pkg_files))
-        # Development: lctx/src/lctx -> lctx/plugin
+        # Development: cctx/src/cctx -> cctx/plugin
         dev_plugin_path = pkg_path.parent.parent / "plugin"
         if dev_plugin_path.is_dir():
             return dev_plugin_path
@@ -1570,7 +1570,7 @@ def eval_plugin(
 ) -> None:
     """Run Living Context plugin evaluation tests.
 
-    Executes test cases against the lctx CLI and validates results.
+    Executes test cases against the cctx CLI and validates results.
 
     Loads test cases from the plugin/eval/test-cases/ directory,
     using fixtures from plugin/eval/fixtures/ for isolated testing.
@@ -1578,7 +1578,7 @@ def eval_plugin(
     # Find the eval runner script
     plugin_src = _get_plugin_source_path()
     if plugin_src is None:
-        _output_error("Plugin files not found. Ensure lctx is properly installed.")
+        _output_error("Plugin files not found. Ensure cctx is properly installed.")
         raise typer.Exit(code=EXIT_USER_ERROR)
 
     runner_script = plugin_src / "eval" / "runner.py"
@@ -1605,7 +1605,7 @@ def eval_plugin(
     try:
         result = subprocess.run(
             [sys.executable] + cmd_args,
-            cwd=plugin_src.parent,  # lctx/ directory
+            cwd=plugin_src.parent,  # cctx/ directory
             capture_output=False,  # Let output flow to console
             text=True,
         )

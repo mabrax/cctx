@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from lctx.validators.markdown_parser import MarkdownParser
+from cctx.validators.markdown_parser import MarkdownParser
 
 
 class TestExtractTables:

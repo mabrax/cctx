@@ -6,14 +6,12 @@ individual template files.
 
 from __future__ import annotations
 
-from pathlib import Path
-
-from lctx.config import load_config
-from lctx.fixers.base import BaseFixer, FixResult
-from lctx.fixers.utils import derive_system_name
-from lctx.scaffolder import scaffold_system_ctx
-from lctx.template_manager import render_template
-from lctx.validators.base import FixableIssue
+from cctx.config import load_config
+from cctx.fixers.base import BaseFixer, FixResult
+from cctx.fixers.utils import derive_system_name
+from cctx.scaffolder import scaffold_system_ctx
+from cctx.template_manager import render_template
+from cctx.validators.base import FixableIssue
 
 
 class MissingCtxDirFixer(BaseFixer):

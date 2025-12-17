@@ -5,7 +5,7 @@ argument-hint: "[path]"
 
 Initialize Living Context documentation structure in the current or specified directory.
 
-Run: `lctx init $ARGUMENTS`
+Run: `cctx init $ARGUMENTS`
 
 This creates:
 - `.ctx/knowledge.db` - SQLite database for systems, ADRs, dependencies

@@ -14,10 +14,10 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Literal
 
-from lctx.validators.base import BaseValidator, ValidationIssue, ValidatorResult
-from lctx.validators.git_helper import has_changes_since
-from lctx.validators.markdown_parser import MarkdownParser
-from lctx.validators.path_filter import find_ctx_directories
+from cctx.validators.base import BaseValidator, ValidationIssue, ValidatorResult
+from cctx.validators.git_helper import has_changes_since
+from cctx.validators.markdown_parser import MarkdownParser
+from cctx.validators.path_filter import find_ctx_directories
 
 
 class DebtAuditor(BaseValidator):

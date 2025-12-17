@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from lctx.config import LctxConfig
-from lctx.scaffolder import (
+from cctx.config import CctxConfig
+from cctx.scaffolder import (
     SYSTEM_TEMPLATES,
     ScaffoldError,
     scaffold_project_ctx,
@@ -21,7 +21,7 @@ class TestScaffoldSystemCtx:
 
     def test_creates_ctx_directory(self, tmp_path: Path) -> None:
         """Test that .ctx/ directory is created."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         result = scaffold_system_ctx("Auth System", system_path, config)
@@ -32,7 +32,7 @@ class TestScaffoldSystemCtx:
 
     def test_creates_all_template_files(self, tmp_path: Path) -> None:
         """Test that all template files are created."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         scaffold_system_ctx("Auth System", system_path, config)
@@ -46,7 +46,7 @@ class TestScaffoldSystemCtx:
 
     def test_creates_adr_subdirectory(self, tmp_path: Path) -> None:
         """Test that adr/ subdirectory is created."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         scaffold_system_ctx("Auth System", system_path, config)
@@ -57,7 +57,7 @@ class TestScaffoldSystemCtx:
 
     def test_adr_directory_is_empty(self, tmp_path: Path) -> None:
         """Test that adr/ directory is created empty."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         scaffold_system_ctx("Auth System", system_path, config)
@@ -67,7 +67,7 @@ class TestScaffoldSystemCtx:
 
     def test_renders_system_name_in_snapshot(self, tmp_path: Path) -> None:
         """Test that system name is rendered in snapshot.md."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         scaffold_system_ctx("Auth System", system_path, config)
@@ -78,7 +78,7 @@ class TestScaffoldSystemCtx:
 
     def test_creates_parent_directories(self, tmp_path: Path) -> None:
         """Test that parent directories are created if needed."""
-        config = LctxConfig()
+        config = CctxConfig()
         # Deeply nested path that doesn't exist
         system_path = tmp_path / "src" / "systems" / "deep" / "nested" / "auth"
 
@@ -89,7 +89,7 @@ class TestScaffoldSystemCtx:
 
     def test_raises_error_if_ctx_exists(self, tmp_path: Path) -> None:
         """Test that error is raised if .ctx/ already exists."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         # Create .ctx/ manually first
@@ -101,7 +101,7 @@ class TestScaffoldSystemCtx:
 
     def test_does_not_overwrite_existing_ctx(self, tmp_path: Path) -> None:
         """Test that existing .ctx/ is not overwritten."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         # Create .ctx/ with a marker file
@@ -119,7 +119,7 @@ class TestScaffoldSystemCtx:
 
     def test_uses_custom_ctx_dir_name(self, tmp_path: Path) -> None:
         """Test that custom ctx_dir name from config is used."""
-        config = LctxConfig(ctx_dir=".context")
+        config = CctxConfig(ctx_dir=".context")
         system_path = tmp_path / "systems" / "auth"
 
         result = scaffold_system_ctx("Auth System", system_path, config)
@@ -129,7 +129,7 @@ class TestScaffoldSystemCtx:
 
     def test_handles_special_characters_in_system_name(self, tmp_path: Path) -> None:
         """Test that special characters in system name are handled."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         # System name with special characters
@@ -140,7 +140,7 @@ class TestScaffoldSystemCtx:
 
     def test_files_are_utf8_encoded(self, tmp_path: Path) -> None:
         """Test that created files are UTF-8 encoded."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         scaffold_system_ctx("Authentication System", system_path, config)
@@ -153,7 +153,7 @@ class TestScaffoldSystemCtx:
 
     def test_returns_created_ctx_path(self, tmp_path: Path) -> None:
         """Test that function returns the created .ctx/ path."""
-        config = LctxConfig()
+        config = CctxConfig()
         system_path = tmp_path / "systems" / "auth"
 
         result = scaffold_system_ctx("Auth System", system_path, config)
@@ -167,7 +167,7 @@ class TestScaffoldProjectCtx:
 
     def test_creates_ctx_directory(self, tmp_path: Path) -> None:
         """Test that .ctx/ directory is created."""
-        config = LctxConfig()
+        config = CctxConfig()
 
         result = scaffold_project_ctx(tmp_path, config)
 
@@ -177,7 +177,7 @@ class TestScaffoldProjectCtx:
 
     def test_creates_graph_json(self, tmp_path: Path) -> None:
         """Test that graph.json is created."""
-        config = LctxConfig()
+        config = CctxConfig()
 
         scaffold_project_ctx(tmp_path, config)
 
@@ -187,7 +187,7 @@ class TestScaffoldProjectCtx:
 
     def test_creates_templates_directory(self, tmp_path: Path) -> None:
         """Test that templates/ directory is created."""
-        config = LctxConfig()
+        config = CctxConfig()
 
         scaffold_project_ctx(tmp_path, config)
 
@@ -197,7 +197,7 @@ class TestScaffoldProjectCtx:
 
     def test_templates_directory_contains_all_templates(self, tmp_path: Path) -> None:
         """Test that templates/ contains all template files."""
-        config = LctxConfig()
+        config = CctxConfig()
 
         scaffold_project_ctx(tmp_path, config)
 
@@ -210,7 +210,7 @@ class TestScaffoldProjectCtx:
 
     def test_creates_readme(self, tmp_path: Path) -> None:
         """Test that README.md is created."""
-        config = LctxConfig()
+        config = CctxConfig()
 
         scaffold_project_ctx(tmp_path, config)
 
@@ -220,7 +220,7 @@ class TestScaffoldProjectCtx:
 
     def test_raises_error_if_ctx_exists(self, tmp_path: Path) -> None:
         """Test that error is raised if .ctx/ already exists."""
-        config = LctxConfig()
+        config = CctxConfig()
 
         # Create .ctx/ manually first
         ctx_path = tmp_path / ".ctx"
@@ -231,7 +231,7 @@ class TestScaffoldProjectCtx:
 
     def test_uses_custom_ctx_dir_name(self, tmp_path: Path) -> None:
         """Test that custom ctx_dir name from config is used."""
-        config = LctxConfig(ctx_dir=".context")
+        config = CctxConfig(ctx_dir=".context")
 
         result = scaffold_project_ctx(tmp_path, config)
 
@@ -240,7 +240,7 @@ class TestScaffoldProjectCtx:
 
     def test_uses_custom_graph_name(self, tmp_path: Path) -> None:
         """Test that custom graph_name from config is used."""
-        config = LctxConfig(graph_name="dependencies.json")
+        config = CctxConfig(graph_name="dependencies.json")
 
         scaffold_project_ctx(tmp_path, config)
 
@@ -249,7 +249,7 @@ class TestScaffoldProjectCtx:
 
     def test_returns_created_ctx_path(self, tmp_path: Path) -> None:
         """Test that function returns the created .ctx/ path."""
-        config = LctxConfig()
+        config = CctxConfig()
 
         result = scaffold_project_ctx(tmp_path, config)
 

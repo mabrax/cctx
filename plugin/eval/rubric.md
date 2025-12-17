@@ -1,6 +1,6 @@
 # Living Context Plugin Evaluation Rubric
 
-This rubric provides a standardized framework for LLM-as-judge evaluation of Living Context (`lctx`) CLI commands and plugin functionality.
+This rubric provides a standardized framework for LLM-as-judge evaluation of Living Context (`cctx`) CLI commands and plugin functionality.
 
 ## Overview
 
@@ -168,7 +168,7 @@ Final Score = (Execution * 0.30) + (Detection * 0.25) + (Guidance * 0.20) +
 Use this template when evaluating a command:
 
 ```markdown
-## Evaluation: `lctx <command>`
+## Evaluation: `cctx <command>`
 
 **Date**: YYYY-MM-DD
 **Evaluator**: LLM/Human

@@ -5,7 +5,7 @@ argument-hint: ""
 
 Display a summary of Living Context health and entity counts.
 
-Run: `lctx status`
+Run: `cctx status`
 
 Shows:
 - Total systems registered

@@ -20,13 +20,13 @@ def get_schema() -> str:
     try:
         # For Python 3.9+, use files() API
         schema_text = (
-            resources.files("lctx.data").joinpath("schema.sql").read_text(encoding="utf-8")
+            resources.files("cctx.data").joinpath("schema.sql").read_text(encoding="utf-8")
         )
     except (AttributeError, TypeError):
         # Fallback for older Python versions using pkgutil
         import pkgutil
 
-        raw = pkgutil.get_data("lctx.data", "schema.sql")
+        raw = pkgutil.get_data("cctx.data", "schema.sql")
         if raw is None:
             raise FileNotFoundError("schema.sql not found in package resources") from None
         schema_text = raw.decode("utf-8")

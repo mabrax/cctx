@@ -5,7 +5,7 @@ argument-hint: "<title> [--system=<path>]"
 
 Create a new ADR from template.
 
-Run: `lctx adr $ARGUMENTS`
+Run: `cctx adr $ARGUMENTS`
 
 Creates:
 - New ADR file with auto-incremented number

@@ -1,10 +1,10 @@
-# lctx Quick Reference
+# cctx Quick Reference
 
 ## First Time Setup
 
 ```bash
 cd your-project
-lctx init    # Creates .ctx/ AND installs Claude Code plugin
+cctx init    # Creates .ctx/ AND installs Claude Code plugin
 ```
 
 > **One command** sets up everything: context database, templates, and Claude Code integration.
@@ -12,40 +12,40 @@ lctx init    # Creates .ctx/ AND installs Claude Code plugin
 ## Daily Commands
 
 ```bash
-lctx health          # Check if docs are healthy
-lctx doctor          # Find fixable issues
-lctx status          # Quick overview (systems, ADRs, deps)
-lctx sync --dry-run  # What docs need updating?
+cctx health          # Check if docs are healthy
+cctx doctor          # Find fixable issues
+cctx status          # Quick overview (systems, ADRs, deps)
+cctx sync --dry-run  # What docs need updating?
 ```
 
 ## Adding Things
 
 ```bash
-lctx add-system src/systems/auth     # New system
-lctx adr "Use Redis for caching"     # New ADR
+cctx add-system src/systems/auth     # New system
+cctx adr "Use Redis for caching"     # New ADR
 ```
 
 ## Listing Things
 
 ```bash
-lctx list systems    # All registered systems
-lctx list adrs       # All ADRs with status
-lctx list debt       # Technical debt items
+cctx list systems    # All registered systems
+cctx list adrs       # All ADRs with status
+cctx list debt       # Technical debt items
 ```
 
 ## Pre-Commit
 
 ```bash
-lctx validate        # Fast check (snapshot + ADR only)
-lctx health --deep   # Full check with constraints
+cctx validate        # Fast check (snapshot + ADR only)
+cctx health --deep   # Full check with constraints
 ```
 
 ## Fixing Issues
 
 ```bash
-lctx doctor              # See what can be fixed
-lctx doctor --dry-run    # Preview fixes (no changes)
-lctx doctor --fix        # Apply all fixes
+cctx doctor              # See what can be fixed
+cctx doctor --dry-run    # Preview fixes (no changes)
+cctx doctor --fix        # Apply all fixes
 ```
 
 ## Workflow Reminder
@@ -54,7 +54,7 @@ lctx doctor --fix        # Apply all fixes
 
 **After changing a system:**
 1. Update `snapshot.md` if API changed
-2. Run `lctx health`
-3. Run `lctx doctor --fix` if issues are fixable
+2. Run `cctx health`
+3. Run `cctx doctor --fix` if issues are fixable
 
-**Making architectural decisions:** `lctx adr "Decision title"`
+**Making architectural decisions:** `cctx adr "Decision title"`

@@ -1,4 +1,4 @@
-"""Tests for lctx configuration management."""
+"""Tests for cctx configuration management."""
 
 from __future__ import annotations
 
@@ -8,20 +8,20 @@ from pathlib import Path
 
 import pytest
 
-from lctx.config import (
-    LctxConfig,
+from cctx.config import (
+    CctxConfig,
     find_config_file,
     load_config,
     validate_paths_exist,
 )
 
 
-class TestLctxConfig:
-    """Tests for the LctxConfig dataclass."""
+class TestCctxConfig:
+    """Tests for the CctxConfig dataclass."""
 
     def test_default_values(self) -> None:
         """Test that default values are set correctly."""
-        config = LctxConfig()
+        config = CctxConfig()
         assert config.ctx_dir == ".ctx"
         assert config.systems_dir == "src/systems"
         assert config.db_name == "knowledge.db"
@@ -29,7 +29,7 @@ class TestLctxConfig:
 
     def test_custom_values(self) -> None:
         """Test that custom values can be set."""
-        config = LctxConfig(
+        config = CctxConfig(
             ctx_dir=".context",
             systems_dir="lib/modules",
             db_name="context.db",
@@ -43,57 +43,57 @@ class TestLctxConfig:
     def test_validation_empty_ctx_dir(self) -> None:
         """Test that empty ctx_dir raises ValueError."""
         with pytest.raises(ValueError, match="ctx_dir must be a non-empty string"):
-            LctxConfig(ctx_dir="")
+            CctxConfig(ctx_dir="")
 
     def test_validation_empty_systems_dir(self) -> None:
         """Test that empty systems_dir raises ValueError."""
         with pytest.raises(ValueError, match="systems_dir must be a non-empty string"):
-            LctxConfig(systems_dir="")
+            CctxConfig(systems_dir="")
 
     def test_validation_empty_db_name(self) -> None:
         """Test that empty db_name raises ValueError."""
         with pytest.raises(ValueError, match="db_name must be a non-empty string"):
-            LctxConfig(db_name="")
+            CctxConfig(db_name="")
 
     def test_validation_db_name_extension(self) -> None:
         """Test that db_name must end with .db."""
         with pytest.raises(ValueError, match="db_name must end with .db"):
-            LctxConfig(db_name="knowledge.sqlite")
+            CctxConfig(db_name="knowledge.sqlite")
 
     def test_validation_empty_graph_name(self) -> None:
         """Test that empty graph_name raises ValueError."""
         with pytest.raises(ValueError, match="graph_name must be a non-empty string"):
-            LctxConfig(graph_name="")
+            CctxConfig(graph_name="")
 
     def test_validation_graph_name_extension(self) -> None:
         """Test that graph_name must end with .json."""
         with pytest.raises(ValueError, match="graph_name must end with .json"):
-            LctxConfig(graph_name="graph.yaml")
+            CctxConfig(graph_name="graph.yaml")
 
     def test_get_ctx_path(self, tmp_path: Path) -> None:
         """Test get_ctx_path returns correct path."""
-        config = LctxConfig(ctx_dir=".ctx")
+        config = CctxConfig(ctx_dir=".ctx")
         assert config.get_ctx_path(tmp_path) == tmp_path / ".ctx"
 
     def test_get_ctx_path_default(self) -> None:
         """Test get_ctx_path uses cwd when no base_path provided."""
-        config = LctxConfig(ctx_dir=".ctx")
+        config = CctxConfig(ctx_dir=".ctx")
         expected = Path.cwd() / ".ctx"
         assert config.get_ctx_path() == expected
 
     def test_get_db_path(self, tmp_path: Path) -> None:
         """Test get_db_path returns correct path."""
-        config = LctxConfig(ctx_dir=".ctx", db_name="knowledge.db")
+        config = CctxConfig(ctx_dir=".ctx", db_name="knowledge.db")
         assert config.get_db_path(tmp_path) == tmp_path / ".ctx" / "knowledge.db"
 
     def test_get_graph_path(self, tmp_path: Path) -> None:
         """Test get_graph_path returns correct path."""
-        config = LctxConfig(ctx_dir=".ctx", graph_name="graph.json")
+        config = CctxConfig(ctx_dir=".ctx", graph_name="graph.json")
         assert config.get_graph_path(tmp_path) == tmp_path / ".ctx" / "graph.json"
 
     def test_get_systems_path(self, tmp_path: Path) -> None:
         """Test get_systems_path returns correct path."""
-        config = LctxConfig(systems_dir="src/systems")
+        config = CctxConfig(systems_dir="src/systems")
         assert config.get_systems_path(tmp_path) == tmp_path / "src" / "systems"
 
 
@@ -102,67 +102,67 @@ class TestFindConfigFile:
 
     def test_find_in_current_dir(self, tmp_path: Path) -> None:
         """Test finding config file in current directory."""
-        config_file = tmp_path / ".lctxrc"
+        config_file = tmp_path / ".cctxrc"
         config_file.write_text("[config]\n")
 
-        result = find_config_file(".lctxrc", tmp_path)
+        result = find_config_file(".cctxrc", tmp_path)
         assert result == config_file
 
     def test_find_in_parent_dir(self, tmp_path: Path) -> None:
         """Test finding config file in parent directory."""
-        config_file = tmp_path / ".lctxrc"
+        config_file = tmp_path / ".cctxrc"
         config_file.write_text("[config]\n")
 
         child_dir = tmp_path / "subdir"
         child_dir.mkdir()
 
-        result = find_config_file(".lctxrc", child_dir)
+        result = find_config_file(".cctxrc", child_dir)
         assert result == config_file
 
     def test_find_in_grandparent_dir(self, tmp_path: Path) -> None:
         """Test finding config file in grandparent directory."""
-        config_file = tmp_path / ".lctxrc"
+        config_file = tmp_path / ".cctxrc"
         config_file.write_text("[config]\n")
 
         nested_dir = tmp_path / "a" / "b" / "c"
         nested_dir.mkdir(parents=True)
 
-        result = find_config_file(".lctxrc", nested_dir)
+        result = find_config_file(".cctxrc", nested_dir)
         assert result == config_file
 
     def test_not_found(self, tmp_path: Path) -> None:
         """Test returning None when config file not found."""
-        result = find_config_file(".lctxrc", tmp_path)
+        result = find_config_file(".cctxrc", tmp_path)
         assert result is None
 
     def test_find_pyproject_toml(self, tmp_path: Path) -> None:
         """Test finding pyproject.toml file."""
         config_file = tmp_path / "pyproject.toml"
-        config_file.write_text("[tool.lctx]\n")
+        config_file.write_text("[tool.cctx]\n")
 
         result = find_config_file("pyproject.toml", tmp_path)
         assert result == config_file
 
     def test_prefers_closest_file(self, tmp_path: Path) -> None:
         """Test that closest file is preferred over parent."""
-        parent_config = tmp_path / ".lctxrc"
+        parent_config = tmp_path / ".cctxrc"
         parent_config.write_text('ctx_dir = ".parent-ctx"\n')
 
         child_dir = tmp_path / "subdir"
         child_dir.mkdir()
-        child_config = child_dir / ".lctxrc"
+        child_config = child_dir / ".cctxrc"
         child_config.write_text('ctx_dir = ".child-ctx"\n')
 
-        result = find_config_file(".lctxrc", child_dir)
+        result = find_config_file(".cctxrc", child_dir)
         assert result == child_config
 
 
 class TestLoadFromLctxrc:
-    """Tests for loading configuration from .lctxrc file."""
+    """Tests for loading configuration from .cctxrc file."""
 
-    def test_load_valid_lctxrc(self, tmp_path: Path) -> None:
-        """Test loading valid .lctxrc file."""
-        config_file = tmp_path / ".lctxrc"
+    def test_load_valid_cctxrc(self, tmp_path: Path) -> None:
+        """Test loading valid .cctxrc file."""
+        config_file = tmp_path / ".cctxrc"
         config_file.write_text(
             'ctx_dir = ".context"\n'
             'systems_dir = "lib/systems"\n'
@@ -176,9 +176,9 @@ class TestLoadFromLctxrc:
         assert config.db_name == "data.db"
         assert config.graph_name == "deps.json"
 
-    def test_load_partial_lctxrc(self, tmp_path: Path) -> None:
-        """Test loading .lctxrc with only some values."""
-        config_file = tmp_path / ".lctxrc"
+    def test_load_partial_cctxrc(self, tmp_path: Path) -> None:
+        """Test loading .cctxrc with only some values."""
+        config_file = tmp_path / ".cctxrc"
         config_file.write_text('ctx_dir = ".myctx"\n')
 
         config = load_config(start_dir=tmp_path)
@@ -189,8 +189,8 @@ class TestLoadFromLctxrc:
         assert config.graph_name == "graph.json"
 
     def test_ignore_unknown_fields(self, tmp_path: Path) -> None:
-        """Test that unknown fields in .lctxrc are ignored."""
-        config_file = tmp_path / ".lctxrc"
+        """Test that unknown fields in .cctxrc are ignored."""
+        config_file = tmp_path / ".cctxrc"
         config_file.write_text(
             'ctx_dir = ".context"\n'
             'unknown_field = "value"\n'
@@ -205,14 +205,14 @@ class TestLoadFromLctxrc:
 class TestLoadFromPyproject:
     """Tests for loading configuration from pyproject.toml."""
 
-    def test_load_from_tool_lctx_section(self, tmp_path: Path) -> None:
-        """Test loading from [tool.lctx] section in pyproject.toml."""
+    def test_load_from_tool_cctx_section(self, tmp_path: Path) -> None:
+        """Test loading from [tool.cctx] section in pyproject.toml."""
         config_file = tmp_path / "pyproject.toml"
         config_file.write_text(
             "[project]\n"
             'name = "myproject"\n'
             "\n"
-            "[tool.lctx]\n"
+            "[tool.cctx]\n"
             'ctx_dir = ".pyproject-ctx"\n'
             'systems_dir = "pyproject/systems"\n'
         )
@@ -221,22 +221,22 @@ class TestLoadFromPyproject:
         assert config.ctx_dir == ".pyproject-ctx"
         assert config.systems_dir == "pyproject/systems"
 
-    def test_empty_tool_lctx_section(self, tmp_path: Path) -> None:
-        """Test handling empty [tool.lctx] section."""
+    def test_empty_tool_cctx_section(self, tmp_path: Path) -> None:
+        """Test handling empty [tool.cctx] section."""
         config_file = tmp_path / "pyproject.toml"
         config_file.write_text(
             "[project]\n"
             'name = "myproject"\n'
             "\n"
-            "[tool.lctx]\n"
+            "[tool.cctx]\n"
         )
 
         config = load_config(start_dir=tmp_path)
         # Should use defaults
         assert config.ctx_dir == ".ctx"
 
-    def test_no_tool_lctx_section(self, tmp_path: Path) -> None:
-        """Test handling pyproject.toml without [tool.lctx] section."""
+    def test_no_tool_cctx_section(self, tmp_path: Path) -> None:
+        """Test handling pyproject.toml without [tool.cctx] section."""
         config_file = tmp_path / "pyproject.toml"
         config_file.write_text(
             "[project]\n"
@@ -254,7 +254,7 @@ class TestLoadFromEnv:
     @pytest.fixture
     def _clean_env(self) -> Generator[None, None, None]:
         """Fixture to clean up environment variables after test."""
-        env_vars = ["LCTX_CTX_DIR", "LCTX_SYSTEMS_DIR", "LCTX_DB_NAME", "LCTX_GRAPH_NAME"]
+        env_vars = ["CCTX_CTX_DIR", "CCTX_SYSTEMS_DIR", "CCTX_DB_NAME", "CCTX_GRAPH_NAME"]
         original_values: dict[str, str | None] = {}
 
         for var in env_vars:
@@ -271,39 +271,39 @@ class TestLoadFromEnv:
                 del os.environ[var]
 
     def test_load_ctx_dir_from_env(self, tmp_path: Path, _clean_env: None) -> None:
-        """Test loading ctx_dir from LCTX_CTX_DIR environment variable."""
-        os.environ["LCTX_CTX_DIR"] = ".env-ctx"
+        """Test loading ctx_dir from CCTX_CTX_DIR environment variable."""
+        os.environ["CCTX_CTX_DIR"] = ".env-ctx"
 
         config = load_config(start_dir=tmp_path)
         assert config.ctx_dir == ".env-ctx"
 
     def test_load_systems_dir_from_env(self, tmp_path: Path, _clean_env: None) -> None:
-        """Test loading systems_dir from LCTX_SYSTEMS_DIR environment variable."""
-        os.environ["LCTX_SYSTEMS_DIR"] = "env/systems"
+        """Test loading systems_dir from CCTX_SYSTEMS_DIR environment variable."""
+        os.environ["CCTX_SYSTEMS_DIR"] = "env/systems"
 
         config = load_config(start_dir=tmp_path)
         assert config.systems_dir == "env/systems"
 
     def test_load_db_name_from_env(self, tmp_path: Path, _clean_env: None) -> None:
-        """Test loading db_name from LCTX_DB_NAME environment variable."""
-        os.environ["LCTX_DB_NAME"] = "env.db"
+        """Test loading db_name from CCTX_DB_NAME environment variable."""
+        os.environ["CCTX_DB_NAME"] = "env.db"
 
         config = load_config(start_dir=tmp_path)
         assert config.db_name == "env.db"
 
     def test_load_graph_name_from_env(self, tmp_path: Path, _clean_env: None) -> None:
-        """Test loading graph_name from LCTX_GRAPH_NAME environment variable."""
-        os.environ["LCTX_GRAPH_NAME"] = "env-graph.json"
+        """Test loading graph_name from CCTX_GRAPH_NAME environment variable."""
+        os.environ["CCTX_GRAPH_NAME"] = "env-graph.json"
 
         config = load_config(start_dir=tmp_path)
         assert config.graph_name == "env-graph.json"
 
     def test_load_all_from_env(self, tmp_path: Path, _clean_env: None) -> None:
         """Test loading all config values from environment variables."""
-        os.environ["LCTX_CTX_DIR"] = ".env-ctx"
-        os.environ["LCTX_SYSTEMS_DIR"] = "env/systems"
-        os.environ["LCTX_DB_NAME"] = "env.db"
-        os.environ["LCTX_GRAPH_NAME"] = "env-graph.json"
+        os.environ["CCTX_CTX_DIR"] = ".env-ctx"
+        os.environ["CCTX_SYSTEMS_DIR"] = "env/systems"
+        os.environ["CCTX_DB_NAME"] = "env.db"
+        os.environ["CCTX_GRAPH_NAME"] = "env-graph.json"
 
         config = load_config(start_dir=tmp_path)
         assert config.ctx_dir == ".env-ctx"
@@ -318,7 +318,7 @@ class TestConfigPrecedence:
     @pytest.fixture
     def _clean_env(self) -> Generator[None, None, None]:
         """Fixture to clean up environment variables after test."""
-        env_vars = ["LCTX_CTX_DIR", "LCTX_SYSTEMS_DIR", "LCTX_DB_NAME", "LCTX_GRAPH_NAME"]
+        env_vars = ["CCTX_CTX_DIR", "CCTX_SYSTEMS_DIR", "CCTX_DB_NAME", "CCTX_GRAPH_NAME"]
         original_values: dict[str, str | None] = {}
 
         for var in env_vars:
@@ -339,16 +339,16 @@ class TestConfigPrecedence:
         # Set up pyproject.toml
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text(
-            "[tool.lctx]\n"
+            "[tool.cctx]\n"
             'ctx_dir = ".pyproject-ctx"\n'
         )
 
-        # Set up .lctxrc
-        lctxrc = tmp_path / ".lctxrc"
-        lctxrc.write_text('ctx_dir = ".lctxrc-ctx"\n')
+        # Set up .cctxrc
+        cctxrc = tmp_path / ".cctxrc"
+        cctxrc.write_text('ctx_dir = ".cctxrc-ctx"\n')
 
         # Set up environment
-        os.environ["LCTX_CTX_DIR"] = ".env-ctx"
+        os.environ["CCTX_CTX_DIR"] = ".env-ctx"
 
         # CLI override should win
         config = load_config(cli_overrides={"ctx_dir": ".cli-ctx"}, start_dir=tmp_path)
@@ -359,42 +359,42 @@ class TestConfigPrecedence:
         # Set up pyproject.toml
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text(
-            "[tool.lctx]\n"
+            "[tool.cctx]\n"
             'ctx_dir = ".pyproject-ctx"\n'
         )
 
-        # Set up .lctxrc
-        lctxrc = tmp_path / ".lctxrc"
-        lctxrc.write_text('ctx_dir = ".lctxrc-ctx"\n')
+        # Set up .cctxrc
+        cctxrc = tmp_path / ".cctxrc"
+        cctxrc.write_text('ctx_dir = ".cctxrc-ctx"\n')
 
         # Environment should override files
-        os.environ["LCTX_CTX_DIR"] = ".env-ctx"
+        os.environ["CCTX_CTX_DIR"] = ".env-ctx"
 
         config = load_config(start_dir=tmp_path)
         assert config.ctx_dir == ".env-ctx"
 
-    def test_lctxrc_overrides_pyproject(self, tmp_path: Path, _clean_env: None) -> None:
-        """Test that .lctxrc overrides pyproject.toml."""
+    def test_cctxrc_overrides_pyproject(self, tmp_path: Path, _clean_env: None) -> None:
+        """Test that .cctxrc overrides pyproject.toml."""
         # Set up pyproject.toml
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text(
-            "[tool.lctx]\n"
+            "[tool.cctx]\n"
             'ctx_dir = ".pyproject-ctx"\n'
         )
 
-        # Set up .lctxrc
-        lctxrc = tmp_path / ".lctxrc"
-        lctxrc.write_text('ctx_dir = ".lctxrc-ctx"\n')
+        # Set up .cctxrc
+        cctxrc = tmp_path / ".cctxrc"
+        cctxrc.write_text('ctx_dir = ".cctxrc-ctx"\n')
 
         config = load_config(start_dir=tmp_path)
-        assert config.ctx_dir == ".lctxrc-ctx"
+        assert config.ctx_dir == ".cctxrc-ctx"
 
     def test_pyproject_overrides_defaults(self, tmp_path: Path, _clean_env: None) -> None:
         """Test that pyproject.toml overrides defaults."""
         # Set up pyproject.toml
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text(
-            "[tool.lctx]\n"
+            "[tool.cctx]\n"
             'ctx_dir = ".pyproject-ctx"\n'
         )
 
@@ -414,23 +414,23 @@ class TestConfigPrecedence:
         # pyproject.toml sets ctx_dir
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text(
-            "[tool.lctx]\n"
+            "[tool.cctx]\n"
             'ctx_dir = ".pyproject-ctx"\n'
         )
 
-        # .lctxrc sets systems_dir
-        lctxrc = tmp_path / ".lctxrc"
-        lctxrc.write_text('systems_dir = "lctxrc/systems"\n')
+        # .cctxrc sets systems_dir
+        cctxrc = tmp_path / ".cctxrc"
+        cctxrc.write_text('systems_dir = "cctxrc/systems"\n')
 
         # Environment sets db_name
-        os.environ["LCTX_DB_NAME"] = "env.db"
+        os.environ["CCTX_DB_NAME"] = "env.db"
 
         # CLI sets graph_name
         config = load_config(cli_overrides={"graph_name": "cli.json"}, start_dir=tmp_path)
 
         # Each should come from its respective source
         assert config.ctx_dir == ".pyproject-ctx"
-        assert config.systems_dir == "lctxrc/systems"
+        assert config.systems_dir == "cctxrc/systems"
         assert config.db_name == "env.db"
         assert config.graph_name == "cli.json"
 
@@ -449,13 +449,13 @@ class TestValidatePathsExist:
         systems_dir = tmp_path / "src" / "systems"
         systems_dir.mkdir(parents=True)
 
-        config = LctxConfig()
+        config = CctxConfig()
         errors = validate_paths_exist(config, tmp_path)
         assert errors == []
 
     def test_missing_ctx_dir(self, tmp_path: Path) -> None:
         """Test validation reports missing context directory."""
-        config = LctxConfig()
+        config = CctxConfig()
         errors = validate_paths_exist(config, tmp_path)
         assert any("Context directory does not exist" in e for e in errors)
 
@@ -467,7 +467,7 @@ class TestValidatePathsExist:
         (ctx_dir / "knowledge.db").touch()
         (ctx_dir / "graph.json").touch()
 
-        config = LctxConfig()
+        config = CctxConfig()
         errors = validate_paths_exist(config, tmp_path)
         assert any("Systems directory does not exist" in e for e in errors)
 
@@ -480,7 +480,7 @@ class TestValidatePathsExist:
         systems_dir = tmp_path / "src" / "systems"
         systems_dir.mkdir(parents=True)
 
-        config = LctxConfig()
+        config = CctxConfig()
         errors = validate_paths_exist(config, tmp_path)
         assert any("Database file does not exist" in e for e in errors)
 
@@ -493,13 +493,13 @@ class TestValidatePathsExist:
         systems_dir = tmp_path / "src" / "systems"
         systems_dir.mkdir(parents=True)
 
-        config = LctxConfig()
+        config = CctxConfig()
         errors = validate_paths_exist(config, tmp_path)
         assert any("Graph file does not exist" in e for e in errors)
 
     def test_reports_all_missing(self, tmp_path: Path) -> None:
         """Test validation reports all missing paths."""
-        config = LctxConfig()
+        config = CctxConfig()
         errors = validate_paths_exist(config, tmp_path)
         assert len(errors) == 4
 
@@ -539,9 +539,9 @@ class TestCliOverrides:
 class TestInvalidTomlFiles:
     """Tests for handling invalid TOML files."""
 
-    def test_invalid_lctxrc_toml(self, tmp_path: Path) -> None:
-        """Test handling invalid TOML in .lctxrc."""
-        config_file = tmp_path / ".lctxrc"
+    def test_invalid_cctxrc_toml(self, tmp_path: Path) -> None:
+        """Test handling invalid TOML in .cctxrc."""
+        config_file = tmp_path / ".cctxrc"
         config_file.write_text("this is not valid toml [[[")
 
         # Should not raise, just use defaults

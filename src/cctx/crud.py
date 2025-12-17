@@ -10,7 +10,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
-from lctx.database import ContextDB
+from cctx.database import ContextDB
 
 
 def _validate_path(path: str, field_name: str = "path") -> None:

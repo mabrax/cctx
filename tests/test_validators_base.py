@@ -1,4 +1,4 @@
-"""Tests for lctx.validators.base module."""
+"""Tests for cctx.validators.base module."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from lctx.validators import (
+from cctx.validators import (
     BaseValidator,
     ValidationIssue,
     ValidatorResult,

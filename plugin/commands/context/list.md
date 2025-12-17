@@ -5,7 +5,7 @@ argument-hint: "[systems|adrs|debt]"
 
 List entities tracked in the Living Context database.
 
-Run: `lctx list $ARGUMENTS`
+Run: `cctx list $ARGUMENTS`
 
 Options:
 - `systems` - List all registered systems with paths

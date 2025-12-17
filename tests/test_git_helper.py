@@ -1,4 +1,4 @@
-"""Tests for lctx.validators.git_helper module."""
+"""Tests for cctx.validators.git_helper module."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from lctx.validators.git_helper import (
+from cctx.validators.git_helper import (
     get_file_mtime_fs,
     get_file_mtime_git,
     has_changes_since,
@@ -54,7 +54,7 @@ class TestGetFileMtimeFs:
 class TestGetFileMtimeGit:
     """Tests for get_file_mtime_git function."""
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_get_git_mtime_success(self, mock_run: MagicMock) -> None:
         """Test successfully getting file mtime from git."""
         mock_run.return_value = MagicMock(
@@ -68,7 +68,7 @@ class TestGetFileMtimeGit:
         assert result.month == 1
         assert result.day == 15
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_get_git_mtime_not_in_git(self, mock_run: MagicMock) -> None:
         """Test when file is not tracked by git."""
         mock_run.return_value = MagicMock(
@@ -78,7 +78,7 @@ class TestGetFileMtimeGit:
         result = get_file_mtime_git(Path("test/file.txt"))
         assert result is None
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_get_git_mtime_git_error(self, mock_run: MagicMock) -> None:
         """Test when git command returns error."""
         mock_run.return_value = MagicMock(
@@ -88,14 +88,14 @@ class TestGetFileMtimeGit:
         result = get_file_mtime_git(Path("test/file.txt"))
         assert result is None
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_get_git_mtime_subprocess_error(self, mock_run: MagicMock) -> None:
         """Test when subprocess raises an error."""
         mock_run.side_effect = subprocess.SubprocessError("git not found")
         result = get_file_mtime_git(Path("test/file.txt"))
         assert result is None
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_get_git_mtime_parse_error(self, mock_run: MagicMock) -> None:
         """Test when timestamp parsing fails."""
         mock_run.return_value = MagicMock(
@@ -105,7 +105,7 @@ class TestGetFileMtimeGit:
         result = get_file_mtime_git(Path("test/file.txt"))
         assert result is None
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_git_command_called_with_correct_args(self, mock_run: MagicMock) -> None:
         """Test that git log command is called with correct arguments."""
         mock_run.return_value = MagicMock(
@@ -120,7 +120,7 @@ class TestGetFileMtimeGit:
         call_args = mock_run.call_args
         assert call_args[0][0] == ["git", "log", "-1", "--format=%ai", "--", str(test_path)]
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_git_mtime_with_timezone(self, mock_run: MagicMock) -> None:
         """Test parsing git timestamp with different timezone."""
         mock_run.return_value = MagicMock(
@@ -135,7 +135,7 @@ class TestGetFileMtimeGit:
 class TestHasChangesSince:
     """Tests for has_changes_since function."""
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_has_changes_since_true(self, mock_run: MagicMock) -> None:
         """Test when file has changes since date."""
         mock_run.return_value = MagicMock(
@@ -146,7 +146,7 @@ class TestHasChangesSince:
         result = has_changes_since(Path("test/file.txt"), since_date)
         assert result is True
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_has_changes_since_false(self, mock_run: MagicMock) -> None:
         """Test when file has no changes since date."""
         mock_run.return_value = MagicMock(
@@ -157,7 +157,7 @@ class TestHasChangesSince:
         result = has_changes_since(Path("test/file.txt"), since_date)
         assert result is False
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_has_changes_since_git_error(self, mock_run: MagicMock) -> None:
         """Test when git command returns error."""
         mock_run.return_value = MagicMock(
@@ -168,7 +168,7 @@ class TestHasChangesSince:
         result = has_changes_since(Path("test/file.txt"), since_date)
         assert result is False
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_has_changes_since_subprocess_error(self, mock_run: MagicMock) -> None:
         """Test when subprocess raises an error."""
         mock_run.side_effect = subprocess.SubprocessError("git not found")
@@ -176,7 +176,7 @@ class TestHasChangesSince:
         result = has_changes_since(Path("test/file.txt"), since_date)
         assert result is False
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_has_changes_since_multiple_commits(self, mock_run: MagicMock) -> None:
         """Test with multiple commits."""
         mock_run.return_value = MagicMock(
@@ -187,7 +187,7 @@ class TestHasChangesSince:
         result = has_changes_since(Path("test/file.txt"), since_date)
         assert result is True
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_git_command_called_with_correct_args(self, mock_run: MagicMock) -> None:
         """Test that git log command is called with correct arguments."""
         mock_run.return_value = MagicMock(
@@ -225,7 +225,7 @@ class TestIntegration:
         finally:
             temp_path.unlink()
 
-    @patch("lctx.validators.git_helper.subprocess.run")
+    @patch("cctx.validators.git_helper.subprocess.run")
     def test_get_file_mtime_git_fallback_to_fs_not_needed(
         self, mock_run: MagicMock
     ) -> None:

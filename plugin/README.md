@@ -16,22 +16,22 @@ A Claude Code plugin that provides co-located documentation management—keeping
 Copy the plugin to your Claude Code configuration directory:
 
 ```bash
-cp -r lctx/plugin ~/.claude/plugins/living-context/
+cp -r cctx/plugin ~/.claude/plugins/living-context/
 ```
 
 The plugin will then be available in Claude Code.
 
 ## Requirements
 
-- **UV Package Manager**: The plugin requires UV for running lctx commands
+- **UV Package Manager**: The plugin requires UV for running cctx commands
   - Install UV: https://docs.astral.sh/uv/
   - Ensure UV is in your PATH
-- **lctx Installed**: Install via UV in your project:
+- **cctx Installed**: Install via UV in your project:
   ```bash
-  uv add --dev lctx
+  uv add --dev cctx
   ```
 
-All plugin commands use the `uv run lctx` pattern to execute the Living Context CLI.
+All plugin commands use the `uv run cctx` pattern to execute the Living Context CLI.
 
 ## Available Commands
 
@@ -41,7 +41,7 @@ All plugin commands use the `uv run lctx` pattern to execute the Living Context 
 Set up Living Context documentation structure in your project.
 
 ```bash
-uv run lctx init [path]
+uv run cctx init [path]
 ```
 
 Creates:
@@ -55,7 +55,7 @@ Creates:
 Validate Living Context documentation consistency and quality.
 
 ```bash
-uv run lctx health [--deep]
+uv run cctx health [--deep]
 ```
 
 Runs validators for:
@@ -72,7 +72,7 @@ Use `--deep` for comprehensive freshness checking.
 Display a quick overview of Living Context health and metrics.
 
 ```bash
-uv run lctx status
+uv run cctx status
 ```
 
 Shows:
@@ -87,7 +87,7 @@ Shows:
 Identify and report stale documentation that needs updating.
 
 ```bash
-uv run lctx sync [--dry-run]
+uv run cctx sync [--dry-run]
 ```
 
 Uses freshness checking to identify:
@@ -104,7 +104,7 @@ Use `--dry-run` to preview changes without taking action.
 Run essential validators suitable for git hooks.
 
 ```bash
-uv run lctx validate
+uv run cctx validate
 ```
 
 Runs a fast subset of validators:
@@ -119,7 +119,7 @@ Designed for commit-time validation—faster than full health checks.
 Set up Living Context documentation for a new system or module.
 
 ```bash
-uv run lctx add-system <path>
+uv run cctx add-system <path>
 ```
 
 Creates in `<path>/.ctx/`:
@@ -136,7 +136,7 @@ Automatically registers the system in the knowledge database.
 Create a new ADR with proper metadata and registration.
 
 ```bash
-uv run lctx adr "<title>" [--system=<path>]
+uv run cctx adr "<title>" [--system=<path>]
 ```
 
 Creates:
@@ -152,7 +152,7 @@ Use `--system=<path>` to associate the ADR with a specific system. The ADR is au
 Query Living Context database for registered entities.
 
 ```bash
-uv run lctx list [systems|adrs|debt]
+uv run cctx list [systems|adrs|debt]
 ```
 
 Options:
@@ -195,7 +195,7 @@ Add to `.git/hooks/pre-commit`:
 
 ```bash
 #!/bin/sh
-uv run lctx validate
+uv run cctx validate
 ```
 
 This ensures documentation stays synchronized with code changes.
@@ -234,4 +234,4 @@ MIT
 
 ## Support
 
-For issues and feature requests, visit the [Living Context repository](https://github.com/plantasia/lctx).
+For issues and feature requests, visit the [Living Context repository](https://github.com/mabrax/cctx).

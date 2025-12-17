@@ -1,4 +1,4 @@
-"""Tests for lctx.graph module."""
+"""Tests for cctx.graph module."""
 
 from __future__ import annotations
 
@@ -9,9 +9,9 @@ from pathlib import Path
 
 import pytest
 
-from lctx.crud import add_dependency, create_system
-from lctx.database import ContextDB
-from lctx.graph import (
+from cctx.crud import add_dependency, create_system
+from cctx.database import ContextDB
+from cctx.graph import (
     CyclicDependencyError,
     GraphError,
     detect_cycles,

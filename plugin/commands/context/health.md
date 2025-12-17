@@ -5,7 +5,7 @@ argument-hint: "[--deep]"
 
 Run all validators to check Living Context health.
 
-Run: `lctx health $ARGUMENTS`
+Run: `cctx health $ARGUMENTS`
 
 Validators:
 - **Snapshot**: File existence, dependency accuracy

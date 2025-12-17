@@ -9,8 +9,8 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from lctx.config import LctxConfig
-from lctx.template_manager import render_template
+from cctx.config import CctxConfig
+from cctx.template_manager import render_template
 
 
 class ScaffoldError(Exception):
@@ -24,7 +24,7 @@ SYSTEM_TEMPLATES = ["snapshot", "constraints", "decisions", "debt"]
 def scaffold_system_ctx(
     system_name: str,
     system_path: Path,
-    config: LctxConfig,
+    config: CctxConfig,
 ) -> Path:
     """Scaffold a new system's .ctx/ directory with all template files.
 
@@ -40,7 +40,7 @@ def scaffold_system_ctx(
             This is substituted into templates via the {System Name} placeholder.
         system_path: Path to the system directory (e.g., Path("src/systems/auth")).
             The .ctx/ directory will be created inside this path.
-        config: LctxConfig instance for path resolution.
+        config: CctxConfig instance for path resolution.
 
     Returns:
         Path to the created .ctx/ directory.
@@ -50,8 +50,8 @@ def scaffold_system_ctx(
             fails, or if the parent system directory cannot be created.
 
     Example:
-        >>> from lctx.scaffolder import scaffold_system_ctx
-        >>> from lctx.config import load_config
+        >>> from cctx.scaffolder import scaffold_system_ctx
+        >>> from cctx.config import load_config
         >>> from pathlib import Path
         >>> config = load_config()
         >>> system_path = Path("src/systems/auth")
@@ -106,7 +106,7 @@ def scaffold_system_ctx(
 
 def scaffold_project_ctx(
     project_path: Path,
-    config: LctxConfig,
+    config: CctxConfig,
 ) -> Path:
     """Scaffold a project's global .ctx/ directory.
 
@@ -122,7 +122,7 @@ def scaffold_project_ctx(
 
     Args:
         project_path: Path to the project root directory.
-        config: LctxConfig instance for path resolution.
+        config: CctxConfig instance for path resolution.
 
     Returns:
         Path to the created .ctx/ directory.
@@ -132,8 +132,8 @@ def scaffold_project_ctx(
             operation fails.
 
     Example:
-        >>> from lctx.scaffolder import scaffold_project_ctx
-        >>> from lctx.config import load_config
+        >>> from cctx.scaffolder import scaffold_project_ctx
+        >>> from cctx.config import load_config
         >>> from pathlib import Path
         >>> config = load_config()
         >>> ctx_path = scaffold_project_ctx(Path("."), config)
@@ -214,17 +214,17 @@ This directory contains project-wide context documentation.
 
 ## Usage
 
-Use the `lctx` CLI tool to manage this context:
+Use the `cctx` CLI tool to manage this context:
 
 ```bash
 # Check context health
-lctx health
+cctx health
 
 # Sync documentation
-lctx sync
+cctx sync
 
 # Initialize database
-lctx init
+cctx init
 ```
 
 ## System Context

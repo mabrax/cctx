@@ -6,18 +6,18 @@ by the validation framework.
 
 from __future__ import annotations
 
-from lctx.fixers.adr_fixer import AdrFixer
-from lctx.fixers.base import BaseFixer, FixResult
-from lctx.fixers.graph_fixer import GraphFixer
-from lctx.fixers.registry import (
+from cctx.fixers.adr_fixer import AdrFixer
+from cctx.fixers.base import BaseFixer, FixResult
+from cctx.fixers.graph_fixer import GraphFixer
+from cctx.fixers.registry import (
     FixerRegistry,
     get_global_registry,
 )
-from lctx.fixers.scaffolding_fixer import (
+from cctx.fixers.scaffolding_fixer import (
     MissingCtxDirFixer,
     MissingTemplateFileFixer,
 )
-from lctx.fixers.snapshot_fixer import SnapshotFixer
+from cctx.fixers.snapshot_fixer import SnapshotFixer
 
 __all__ = [
     # Base types

@@ -5,7 +5,7 @@ argument-hint: ""
 
 Run essential validators for pre-commit hooks.
 
-Run: `lctx validate`
+Run: `cctx validate`
 
 Runs a subset of validators suitable for pre-commit:
 - Snapshot validator (file existence, dependencies)

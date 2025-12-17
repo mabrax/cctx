@@ -11,11 +11,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
-from lctx.validators.adr_validator import AdrValidator
-from lctx.validators.base import BaseValidator, ValidationIssue, ValidatorResult
-from lctx.validators.debt_auditor import DebtAuditor
-from lctx.validators.freshness_checker import FreshnessChecker
-from lctx.validators.snapshot_validator import SnapshotValidator
+from cctx.validators.adr_validator import AdrValidator
+from cctx.validators.base import BaseValidator, ValidationIssue, ValidatorResult
+from cctx.validators.debt_auditor import DebtAuditor
+from cctx.validators.freshness_checker import FreshnessChecker
+from cctx.validators.snapshot_validator import SnapshotValidator
 
 
 @dataclass

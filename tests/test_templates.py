@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from lctx.template_manager import (
+from cctx.template_manager import (
     get_template,
     list_templates,
     render_template,
