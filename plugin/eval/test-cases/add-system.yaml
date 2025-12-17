@@ -1,0 +1,51 @@
+command: add-system
+description: Test cases for lctx add-system command
+
+test_cases:
+  - name: add_system_new_system
+    description: Add a new system to healthy project
+    fixture: healthy-project
+    command: uv run lctx add-system src/systems/new_system --name "New System"
+    expected:
+      exit_code: 0
+      stdout_contains: ["success", "added", "registered"]
+
+  - name: add_system_with_dependencies
+    description: Add system with dependency references
+    fixture: healthy-project
+    command: uv run lctx add-system src/systems/auth --name "Auth" --depends-on="src/systems/example"
+    expected:
+      exit_code: 0
+      stdout_contains: ["success", "depends"]
+
+  - name: add_system_duplicate
+    description: Adding duplicate system should fail
+    fixture: healthy-project
+    command: uv run lctx add-system src/systems/example --name "Example"
+    expected:
+      exit_code: 1
+      stdout_contains: ["already exists", "duplicate"]
+
+  - name: add_system_json_output
+    description: JSON output confirms system registration
+    fixture: healthy-project
+    command: uv run lctx add-system src/systems/new --name "New" --json
+    expected:
+      exit_code: 0
+      json_fields: ["success", "path", "name"]
+
+  - name: add_system_creates_structure
+    description: System is created with proper documentation structure
+    fixture: healthy-project
+    command: uv run lctx add-system src/systems/new --name "New" --scaffold
+    expected:
+      exit_code: 0
+      stdout_contains: ["created", "scaffold", "snapshot.md"]
+
+  - name: add_system_no_database
+    description: Error when database not initialized
+    fixture: empty-project
+    command: uv run lctx add-system src/systems/new --name "New"
+    expected:
+      exit_code: 1
+      stdout_contains: ["not initialized", "init"]

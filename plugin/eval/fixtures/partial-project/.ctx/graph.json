@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-12-10T00:00:00Z",
+  "systems": [
+    {
+      "path": "src/core",
+      "name": "Core System",
+      "description": "Core functionality system",
+      "dependencies": []
+    },
+    {
+      "path": "src/systems/auth",
+      "name": "Auth System",
+      "description": "Authentication system",
+      "dependencies": ["src/core"]
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "src/systems/auth",
+      "to": "src/core"
+    }
+  ],
+  "metrics": {
+    "total_systems": 2,
+    "total_dependencies": 1,
+    "cycles": 0
+  }
+}

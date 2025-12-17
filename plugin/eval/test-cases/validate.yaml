@@ -1,0 +1,51 @@
+command: validate
+description: Test cases for lctx validate command
+
+test_cases:
+  - name: validate_healthy_project
+    description: Validation passes on well-formed context
+    fixture: healthy-project
+    command: uv run lctx validate
+    expected:
+      exit_code: 0
+      stdout_contains: ["PASS", "valid", "no errors"]
+
+  - name: validate_unhealthy_project
+    description: Validation detects multiple issues
+    fixture: unhealthy-project
+    command: uv run lctx validate
+    expected:
+      exit_code: 1
+      stdout_contains: ["FAIL", "error", "orphaned"]
+
+  - name: validate_json_output
+    description: JSON output includes all validation errors and warnings
+    fixture: unhealthy-project
+    command: uv run lctx validate --json
+    expected:
+      exit_code: 1
+      json_fields: ["status", "errors", "warnings", "systems"]
+
+  - name: validate_partial_project
+    description: Validation finds incomplete documentation
+    fixture: partial-project
+    command: uv run lctx validate
+    expected:
+      exit_code: 1
+      stdout_contains: ["missing", "incomplete"]
+
+  - name: validate_strict_mode
+    description: Strict mode treats warnings as errors
+    fixture: unhealthy-project
+    command: uv run lctx validate --strict
+    expected:
+      exit_code: 1
+      stdout_contains: ["strict", "warning"]
+
+  - name: validate_specific_system
+    description: Validate only specified system
+    fixture: healthy-project
+    command: uv run lctx validate --system=src/systems/example
+    expected:
+      exit_code: 0
+      stdout_contains: ["valid", "example"]

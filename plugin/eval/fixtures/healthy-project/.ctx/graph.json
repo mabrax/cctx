@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-12-15T00:00:00Z",
+  "systems": [
+    {
+      "path": "src/systems/example",
+      "name": "Example System",
+      "description": "A well-documented example system",
+      "dependencies": []
+    }
+  ],
+  "dependencies": [],
+  "metrics": {
+    "total_systems": 1,
+    "total_dependencies": 0,
+    "cycles": 0
+  }
+}

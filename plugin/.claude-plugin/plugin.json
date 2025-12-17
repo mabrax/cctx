@@ -1,0 +1,16 @@
+{
+  "name": "living-context",
+  "version": "0.1.0",
+  "description": "Living Context CLI Tool - Co-located documentation that stays synchronized with code",
+  "author": "Plantasia Team",
+  "keywords": [
+    "documentation",
+    "context",
+    "architecture",
+    "adr",
+    "technical-debt",
+    "developer-tools"
+  ],
+  "homepage": "https://github.com/plantasia/lctx",
+  "license": "MIT"
+}

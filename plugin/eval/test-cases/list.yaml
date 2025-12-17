@@ -1,0 +1,67 @@
+command: list
+description: Test cases for lctx list command
+
+test_cases:
+  - name: list_systems
+    description: List all registered systems
+    fixture: healthy-project
+    command: uv run lctx list systems
+    expected:
+      exit_code: 0
+      stdout_contains: ["example", "system", "path"]
+
+  - name: list_systems_unhealthy
+    description: List shows stale systems
+    fixture: unhealthy-project
+    command: uv run lctx list systems
+    expected:
+      exit_code: 0
+      stdout_contains: ["example", "legacy"]
+
+  - name: list_systems_json
+    description: JSON output contains system details
+    fixture: healthy-project
+    command: uv run lctx list systems --json
+    expected:
+      exit_code: 0
+      json_fields: ["systems", "name", "path"]
+
+  - name: list_adrs
+    description: List all ADRs in project
+    fixture: healthy-project
+    command: uv run lctx list adrs
+    expected:
+      exit_code: 0
+      stdout_contains: ["ADR-001", "TypeScript"]
+
+  - name: list_adrs_empty
+    description: List shows empty when no ADRs exist
+    fixture: partial-project
+    command: uv run lctx list adrs
+    expected:
+      exit_code: 0
+      stdout_contains: ["no ADRs", "empty"]
+
+  - name: list_adrs_json
+    description: JSON output contains ADR details
+    fixture: healthy-project
+    command: uv run lctx list adrs --json
+    expected:
+      exit_code: 0
+      json_fields: ["adrs", "id", "title", "status"]
+
+  - name: list_debt
+    description: List all technical debt items
+    fixture: unhealthy-project
+    command: uv run lctx list debt
+    expected:
+      exit_code: 0
+      stdout_contains: ["debt", "overdue", "open"]
+
+  - name: list_debt_json
+    description: JSON output contains debt details
+    fixture: unhealthy-project
+    command: uv run lctx list debt --json
+    expected:
+      exit_code: 0
+      json_fields: ["debt_items", "description", "status"]

@@ -1,0 +1,35 @@
+command: init
+description: Test cases for lctx init command
+
+test_cases:
+  - name: init_new_project
+    description: Initialize context in empty project
+    fixture: empty-project
+    command: uv run lctx init
+    expected:
+      exit_code: 0
+      stdout_contains: ["Success", "Initialized", ".ctx"]
+
+  - name: init_existing_context
+    description: Re-init existing context should succeed
+    fixture: healthy-project
+    command: uv run lctx init
+    expected:
+      exit_code: 0
+      stdout_contains: ["Success"]
+
+  - name: init_json_output
+    description: JSON output mode works
+    fixture: empty-project
+    command: uv run lctx init --json
+    expected:
+      exit_code: 0
+      json_fields: ["success", "path"]
+
+  - name: init_quiet_mode
+    description: Quiet mode suppresses output
+    fixture: empty-project
+    command: uv run lctx init --quiet
+    expected:
+      exit_code: 0
+      stdout_contains: []

@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-06-01T00:00:00Z",
+  "systems": [
+    {
+      "path": "src/systems/example",
+      "name": "Example System",
+      "description": "A poorly documented example system",
+      "dependencies": ["src/systems/legacy"]
+    },
+    {
+      "path": "src/systems/legacy",
+      "name": "Legacy System",
+      "description": "An old system with no docs",
+      "dependencies": []
+    },
+    {
+      "path": "src/systems/removed-system",
+      "name": "Removed System",
+      "description": "This system no longer exists",
+      "dependencies": []
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "src/systems/example",
+      "to": "src/systems/legacy"
+    }
+  ],
+  "metrics": {
+    "total_systems": 3,
+    "total_dependencies": 1,
+    "cycles": 0
+  }
+}

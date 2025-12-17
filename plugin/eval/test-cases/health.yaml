@@ -1,0 +1,42 @@
+command: health
+description: Test cases for lctx health command
+
+test_cases:
+  - name: health_healthy_project
+    description: Health check passes on well-formed context
+    fixture: healthy-project
+    command: uv run lctx health
+    expected:
+      exit_code: 0
+      stdout_contains: ["PASS", "healthy", "valid"]
+
+  - name: health_unhealthy_project
+    description: Health check detects multiple issues
+    fixture: unhealthy-project
+    command: uv run lctx health
+    expected:
+      exit_code: 1
+      stdout_contains: ["FAIL", "error", "validation"]
+
+  - name: health_json_output
+    description: JSON output contains all validation details
+    fixture: healthy-project
+    command: uv run lctx health --json
+    expected:
+      exit_code: 0
+      json_fields: ["status", "errors", "warnings"]
+
+  - name: health_deep_validation
+    description: Deep validation checks constraints
+    fixture: unhealthy-project
+    command: uv run lctx health --deep
+    expected:
+      exit_code: 1
+      stdout_contains: ["constraint", "violation", "FAIL"]
+
+  - name: health_quiet_mode
+    description: Quiet mode only shows exit code
+    fixture: healthy-project
+    command: uv run lctx health --quiet
+    expected:
+      exit_code: 0

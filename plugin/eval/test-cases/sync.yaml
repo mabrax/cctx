@@ -1,0 +1,51 @@
+command: sync
+description: Test cases for lctx sync command
+
+test_cases:
+  - name: sync_update_stale_docs
+    description: Sync updates stale snapshot.md from source
+    fixture: unhealthy-project
+    command: uv run lctx sync
+    expected:
+      exit_code: 0
+      stdout_contains: ["updated", "synchronized", "success"]
+
+  - name: sync_already_in_sync
+    description: Sync on healthy project reports no changes
+    fixture: healthy-project
+    command: uv run lctx sync
+    expected:
+      exit_code: 0
+      stdout_contains: ["up-to-date", "already", "no change"]
+
+  - name: sync_dry_run
+    description: Dry-run shows what would change without modifying
+    fixture: unhealthy-project
+    command: uv run lctx sync --dry-run
+    expected:
+      exit_code: 0
+      stdout_contains: ["would", "change", "update"]
+
+  - name: sync_json_output
+    description: JSON output shows sync operations performed
+    fixture: unhealthy-project
+    command: uv run lctx sync --json
+    expected:
+      exit_code: 0
+      json_fields: ["success", "changes", "updated_files"]
+
+  - name: sync_force_update
+    description: Force flag overwrites existing documentation
+    fixture: unhealthy-project
+    command: uv run lctx sync --force
+    expected:
+      exit_code: 0
+      stdout_contains: ["updated", "force"]
+
+  - name: sync_specific_system
+    description: Sync only specified system
+    fixture: unhealthy-project
+    command: uv run lctx sync --system=src/systems/example
+    expected:
+      exit_code: 0
+      stdout_contains: ["synchronized", "updated"]

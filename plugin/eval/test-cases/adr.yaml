@@ -1,0 +1,51 @@
+command: adr
+description: Test cases for lctx adr command
+
+test_cases:
+  - name: adr_create_new
+    description: Create new ADR in system
+    fixture: healthy-project
+    command: uv run lctx adr --system=src/systems/example --title="Use async/await" --context="Performance concerns" --decision="Adopt async/await pattern"
+    expected:
+      exit_code: 0
+      stdout_contains: ["created", "ADR-002", "success"]
+
+  - name: adr_create_with_consequences
+    description: Create ADR with consequences field
+    fixture: healthy-project
+    command: uv run lctx adr --system=src/systems/example --title="Use async/await" --context="Performance" --decision="Async/await" --consequences="Learning curve"
+    expected:
+      exit_code: 0
+      stdout_contains: ["created", "ADR"]
+
+  - name: adr_list_system_adrs
+    description: List all ADRs for a system
+    fixture: healthy-project
+    command: uv run lctx adr --system=src/systems/example --list
+    expected:
+      exit_code: 0
+      stdout_contains: ["ADR-001", "TypeScript"]
+
+  - name: adr_json_output
+    description: JSON output contains ADR details
+    fixture: healthy-project
+    command: uv run lctx adr --system=src/systems/example --title="New ADR" --context="Test" --decision="Test decision" --json
+    expected:
+      exit_code: 0
+      json_fields: ["id", "title", "status"]
+
+  - name: adr_invalid_system
+    description: Error when system not found
+    fixture: healthy-project
+    command: uv run lctx adr --system=src/systems/nonexistent --title="Title"
+    expected:
+      exit_code: 1
+      stdout_contains: ["not found", "system"]
+
+  - name: adr_missing_required_fields
+    description: Error when required fields missing
+    fixture: healthy-project
+    command: uv run lctx adr --system=src/systems/example
+    expected:
+      exit_code: 1
+      stdout_contains: ["required", "title"]
