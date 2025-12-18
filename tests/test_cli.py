@@ -458,9 +458,11 @@ class TestAddSystemCommand:
             result = runner.invoke(app, ["add-system", str(outside_path)])
             assert result.exit_code == 1
             # Check output (mix of stdout/stderr)
-            if "must be inside project root" not in result.output:
+            # Normalize whitespace since terminal width may cause line wrapping
+            normalized_output = " ".join(result.output.split())
+            if "must be inside project root" not in normalized_output:
                 print(f"Output was: {result.output!r}")
-            assert "must be inside project root" in result.output
+            assert "must be inside project root" in normalized_output
         finally:
             os.chdir(original_cwd)
 
@@ -616,9 +618,11 @@ class TestAdrCommand:
             # This fails because system path resolution happens before the check we added
             # But let's see if our error handling catches it
             assert result.exit_code == 1
-            if "must be inside project root" not in result.output:
+            # Normalize whitespace since terminal width may cause line wrapping
+            normalized_output = " ".join(result.output.split())
+            if "must be inside project root" not in normalized_output:
                 print(f"Output was: {result.output!r}")
-            assert "must be inside project root" in result.output
+            assert "must be inside project root" in normalized_output
         finally:
             os.chdir(original_cwd)
 
