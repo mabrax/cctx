@@ -40,10 +40,13 @@ def get_file_mtime_git(path: Path) -> datetime | None:
         # Parse ISO 8601 format: "2025-01-15 10:30:45 +0000"
         timestamp_str = result.stdout.strip()
         # Git format has spaces; convert to ISO format for fromisoformat
-        # "2025-01-15 10:30:45 +0000" -> "2025-01-15T10:30:45+0000"
+        # "2025-01-15 10:30:45 +0000" -> "2025-01-15T10:30:45+00:00"
         parts = timestamp_str.rsplit(" ", 1)  # Split off timezone
         if len(parts) == 2:
             datetime_part, tz_part = parts
+            # Convert timezone from +0000 to +00:00 for Python 3.10 compatibility
+            if len(tz_part) == 5 and tz_part[0] in "+-":
+                tz_part = tz_part[:3] + ":" + tz_part[3:]
             # Replace date/time separator and remove space before timezone
             iso_str = datetime_part.replace(" ", "T", 1) + tz_part
         else:
