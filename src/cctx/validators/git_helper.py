@@ -39,8 +39,16 @@ def get_file_mtime_git(path: Path) -> datetime | None:
 
         # Parse ISO 8601 format: "2025-01-15 10:30:45 +0000"
         timestamp_str = result.stdout.strip()
-        # Use fromisoformat with the timestamp (replacing space with T)
-        dt = datetime.fromisoformat(timestamp_str.replace(" ", "T", 1))
+        # Git format has spaces; convert to ISO format for fromisoformat
+        # "2025-01-15 10:30:45 +0000" -> "2025-01-15T10:30:45+0000"
+        parts = timestamp_str.rsplit(" ", 1)  # Split off timezone
+        if len(parts) == 2:
+            datetime_part, tz_part = parts
+            # Replace date/time separator and remove space before timezone
+            iso_str = datetime_part.replace(" ", "T", 1) + tz_part
+        else:
+            iso_str = timestamp_str.replace(" ", "T", 1)
+        dt = datetime.fromisoformat(iso_str)
         return dt
     except (subprocess.SubprocessError, ValueError, OSError):
         # git not available, file not tracked, or parsing error
