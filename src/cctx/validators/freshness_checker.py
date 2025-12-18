@@ -90,9 +90,7 @@ class FreshnessChecker(BaseValidator):
             )
 
             # Check decisions.md vs ADR freshness
-            issues.extend(
-                self._check_decisions_freshness(system_path, rel_system)
-            )
+            issues.extend(self._check_decisions_freshness(system_path, rel_system))
 
         # Determine overall status
         has_errors = any(issue.severity == "error" for issue in issues)
@@ -158,10 +156,32 @@ class FreshnessChecker(BaseValidator):
 
         # Common source file extensions
         source_extensions = {
-            ".ts", ".tsx", ".js", ".jsx", ".py", ".rs", ".go",
-            ".java", ".kt", ".swift", ".c", ".cpp", ".h", ".hpp",
-            ".cs", ".rb", ".php", ".vue", ".svelte",
-            ".json", ".yaml", ".yml", ".mjs", ".cjs", ".sh", ".sql",
+            ".ts",
+            ".tsx",
+            ".js",
+            ".jsx",
+            ".py",
+            ".rs",
+            ".go",
+            ".java",
+            ".kt",
+            ".swift",
+            ".c",
+            ".cpp",
+            ".h",
+            ".hpp",
+            ".cs",
+            ".rb",
+            ".php",
+            ".vue",
+            ".svelte",
+            ".json",
+            ".yaml",
+            ".yml",
+            ".mjs",
+            ".cjs",
+            ".sh",
+            ".sql",
         }
 
         for file_path in system_path.rglob("*"):
@@ -324,7 +344,9 @@ class FreshnessChecker(BaseValidator):
             if ctx_dir.parent != self.project_root:
                 system_path = ctx_dir.parent
                 source_mtime = self._get_latest_source_mtime(system_path)
-                if source_mtime is not None and (latest_system_mtime is None or source_mtime > latest_system_mtime):
+                if source_mtime is not None and (
+                    latest_system_mtime is None or source_mtime > latest_system_mtime
+                ):
                     latest_system_mtime = source_mtime
 
         if latest_system_mtime is None:

@@ -397,7 +397,9 @@ Status: accepted
         from cctx.adr_crud import create_adr
 
         with ContextDB(db_path, auto_init=False) as db:
-            create_adr(db, "ADR-001", "Use PostgreSQL", "accepted", ".ctx/adr/ADR-001-use-postgresql.md")
+            create_adr(
+                db, "ADR-001", "Use PostgreSQL", "accepted", ".ctx/adr/ADR-001-use-postgresql.md"
+            )
 
         validator = AdrValidator(tmp_path, db_path)
         result = validator.validate()

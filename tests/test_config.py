@@ -192,9 +192,7 @@ class TestLoadFromLctxrc:
         """Test that unknown fields in .cctxrc are ignored."""
         config_file = tmp_path / ".cctxrc"
         config_file.write_text(
-            'ctx_dir = ".context"\n'
-            'unknown_field = "value"\n'
-            'another_unknown = 42\n'
+            'ctx_dir = ".context"\nunknown_field = "value"\nanother_unknown = 42\n'
         )
 
         config = load_config(start_dir=tmp_path)
@@ -224,12 +222,7 @@ class TestLoadFromPyproject:
     def test_empty_tool_cctx_section(self, tmp_path: Path) -> None:
         """Test handling empty [tool.cctx] section."""
         config_file = tmp_path / "pyproject.toml"
-        config_file.write_text(
-            "[project]\n"
-            'name = "myproject"\n'
-            "\n"
-            "[tool.cctx]\n"
-        )
+        config_file.write_text('[project]\nname = "myproject"\n\n[tool.cctx]\n')
 
         config = load_config(start_dir=tmp_path)
         # Should use defaults
@@ -238,10 +231,7 @@ class TestLoadFromPyproject:
     def test_no_tool_cctx_section(self, tmp_path: Path) -> None:
         """Test handling pyproject.toml without [tool.cctx] section."""
         config_file = tmp_path / "pyproject.toml"
-        config_file.write_text(
-            "[project]\n"
-            'name = "myproject"\n'
-        )
+        config_file.write_text('[project]\nname = "myproject"\n')
 
         config = load_config(start_dir=tmp_path)
         # Should use defaults
@@ -338,10 +328,7 @@ class TestConfigPrecedence:
         """Test that CLI arguments override all other sources."""
         # Set up pyproject.toml
         pyproject = tmp_path / "pyproject.toml"
-        pyproject.write_text(
-            "[tool.cctx]\n"
-            'ctx_dir = ".pyproject-ctx"\n'
-        )
+        pyproject.write_text('[tool.cctx]\nctx_dir = ".pyproject-ctx"\n')
 
         # Set up .cctxrc
         cctxrc = tmp_path / ".cctxrc"
@@ -358,10 +345,7 @@ class TestConfigPrecedence:
         """Test that environment variables override file configs."""
         # Set up pyproject.toml
         pyproject = tmp_path / "pyproject.toml"
-        pyproject.write_text(
-            "[tool.cctx]\n"
-            'ctx_dir = ".pyproject-ctx"\n'
-        )
+        pyproject.write_text('[tool.cctx]\nctx_dir = ".pyproject-ctx"\n')
 
         # Set up .cctxrc
         cctxrc = tmp_path / ".cctxrc"
@@ -377,10 +361,7 @@ class TestConfigPrecedence:
         """Test that .cctxrc overrides pyproject.toml."""
         # Set up pyproject.toml
         pyproject = tmp_path / "pyproject.toml"
-        pyproject.write_text(
-            "[tool.cctx]\n"
-            'ctx_dir = ".pyproject-ctx"\n'
-        )
+        pyproject.write_text('[tool.cctx]\nctx_dir = ".pyproject-ctx"\n')
 
         # Set up .cctxrc
         cctxrc = tmp_path / ".cctxrc"
@@ -393,10 +374,7 @@ class TestConfigPrecedence:
         """Test that pyproject.toml overrides defaults."""
         # Set up pyproject.toml
         pyproject = tmp_path / "pyproject.toml"
-        pyproject.write_text(
-            "[tool.cctx]\n"
-            'ctx_dir = ".pyproject-ctx"\n'
-        )
+        pyproject.write_text('[tool.cctx]\nctx_dir = ".pyproject-ctx"\n')
 
         config = load_config(start_dir=tmp_path)
         assert config.ctx_dir == ".pyproject-ctx"
@@ -413,10 +391,7 @@ class TestConfigPrecedence:
         """Test partial overrides from different sources."""
         # pyproject.toml sets ctx_dir
         pyproject = tmp_path / "pyproject.toml"
-        pyproject.write_text(
-            "[tool.cctx]\n"
-            'ctx_dir = ".pyproject-ctx"\n'
-        )
+        pyproject.write_text('[tool.cctx]\nctx_dir = ".pyproject-ctx"\n')
 
         # .cctxrc sets systems_dir
         cctxrc = tmp_path / ".cctxrc"

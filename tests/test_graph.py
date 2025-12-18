@@ -217,9 +217,7 @@ class TestSaveGraph:
 
     def test_save_graph_valid_json(self, temp_dir: Path) -> None:
         """Test saved file is valid JSON."""
-        graph = [
-            {"system": "test", "name": "Test", "dependencies": ["a"], "dependents": ["b"]}
-        ]
+        graph = [{"system": "test", "name": "Test", "dependencies": ["a"], "dependents": ["b"]}]
         path = temp_dir / "graph.json"
 
         save_graph(graph, path)
@@ -675,9 +673,7 @@ class TestComplexScenarios:
             for i in range(10):
                 create_system(initialized_db, f"src/systems/s{i}", f"System {i}")
             for i in range(9):
-                add_dependency(
-                    initialized_db, f"src/systems/s{i}", f"src/systems/s{i+1}"
-                )
+                add_dependency(initialized_db, f"src/systems/s{i}", f"src/systems/s{i + 1}")
 
         deps = get_all_dependencies(initialized_db, "src/systems/s0")
         assert len(deps) == 9
@@ -693,9 +689,7 @@ class TestComplexScenarios:
             create_system(initialized_db, "src/systems/main", "Main System")
             for i in range(10):
                 create_system(initialized_db, f"src/systems/dep{i}", f"Dependency {i}")
-                add_dependency(
-                    initialized_db, "src/systems/main", f"src/systems/dep{i}"
-                )
+                add_dependency(initialized_db, "src/systems/main", f"src/systems/dep{i}")
 
         deps = get_all_dependencies(initialized_db, "src/systems/main")
         assert len(deps) == 10

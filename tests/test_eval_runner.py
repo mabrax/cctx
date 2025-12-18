@@ -38,11 +38,7 @@ class TestRunTestCase:
 
     def test_run_test_case_calls_subprocess_correctly(self, tmp_path: Path) -> None:
         """Test that run_test_case calls subprocess with shell=False and split command."""
-        test_case = {
-            "name": "test1",
-            "command": "cctx init --json",
-            "expected": {"exit_code": 0}
-        }
+        test_case = {"name": "test1", "command": "cctx init --json", "expected": {"exit_code": 0}}
         work_dir = tmp_path / "work"
         work_dir.mkdir()
         cctx_dir = tmp_path / "cctx"
@@ -331,9 +327,7 @@ test_cases:
         result = load_test_cases(test_cases_dir)
         assert len(result) == 0
 
-    def test_load_test_cases_skips_files_without_test_cases(
-        self, tmp_path: Path
-    ) -> None:
+    def test_load_test_cases_skips_files_without_test_cases(self, tmp_path: Path) -> None:
         """Test that files without test_cases key are skipped."""
         test_cases_dir = tmp_path / "test-cases"
         test_cases_dir.mkdir()
@@ -372,9 +366,9 @@ test_cases:
             yaml_file = test_cases_dir / filename
             yaml_file.write_text(
                 f"""
-command: {filename.split('.')[0]}
+command: {filename.split(".")[0]}
 test_cases:
-  - name: {filename.split('.')[0]}_test
+  - name: {filename.split(".")[0]}_test
     command: test
     expected:
       exit_code: 0

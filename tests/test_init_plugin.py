@@ -127,7 +127,14 @@ class TestInitPluginInstallation:
             runner.invoke(app, ["init", str(tmp_path)])
 
             # Verify initial content
-            plugin_json = tmp_path / ".claude" / "plugins" / "living-context" / ".claude-plugin" / "plugin.json"
+            plugin_json = (
+                tmp_path
+                / ".claude"
+                / "plugins"
+                / "living-context"
+                / ".claude-plugin"
+                / "plugin.json"
+            )
             assert "1.0" in plugin_json.read_text()
 
             # Update source

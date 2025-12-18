@@ -64,7 +64,9 @@ def _row_to_dict(row: Any) -> dict[str, Any]:
 # Systems CRUD Operations
 
 
-def create_system(db: ContextDB, path: str, name: str, description: str | None = None) -> dict[str, Any]:
+def create_system(
+    db: ContextDB, path: str, name: str, description: str | None = None
+) -> dict[str, Any]:
     """Create a new system.
 
     Args:

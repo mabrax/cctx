@@ -360,10 +360,12 @@ def health(
                     "issues_count": len(vr.issues),
                 }
                 result["validators"].append(validator_info)
-                result["checks"].append({
-                    "name": vr.name,
-                    "passed": vr.status == "pass",
-                })
+                result["checks"].append(
+                    {
+                        "name": vr.name,
+                        "passed": vr.status == "pass",
+                    }
+                )
 
             # Collect issues
             for issue in validation_result.all_issues:
@@ -413,7 +415,9 @@ def health(
                 if "summary" in result:
                     console.print("")
                     console.print(f"  Validators: {result['summary']['validators_run']}")
-                    console.print(f"  Issues: {result['summary']['total_issues']} ({result['summary']['errors']} errors, {result['summary']['warnings']} warnings)")
+                    console.print(
+                        f"  Issues: {result['summary']['total_issues']} ({result['summary']['errors']} errors, {result['summary']['warnings']} warnings)"
+                    )
 
                 for warning in result["warnings"][:10]:  # Limit displayed warnings
                     _output_warning(warning)
@@ -596,7 +600,9 @@ def sync(
             if not result["stale_files"]:
                 _output_success("All documentation is up to date!", quiet)
             else:
-                _output_warning(f"Found {len(result['stale_files'])} stale documentation files:", quiet)
+                _output_warning(
+                    f"Found {len(result['stale_files'])} stale documentation files:", quiet
+                )
                 if not quiet:
                     for stale in result["stale_files"]:
                         severity_color = {
@@ -604,7 +610,9 @@ def sync(
                             "warning": "yellow",
                             "info": "blue",
                         }.get(stale["severity"], "white")
-                        console.print(f"  [{severity_color}]{stale['severity']}[/{severity_color}] {stale['system']}/{stale['file']}")
+                        console.print(
+                            f"  [{severity_color}]{stale['severity']}[/{severity_color}] {stale['system']}/{stale['file']}"
+                        )
                         console.print(f"    {stale['message']}")
 
                 if not dry_run:
@@ -690,10 +698,12 @@ def validate(
 
             # Add validator results
             for vr in validation_result.results:
-                result["checks"].append({
-                    "name": vr.name,
-                    "passed": vr.status == "pass",
-                })
+                result["checks"].append(
+                    {
+                        "name": vr.name,
+                        "passed": vr.status == "pass",
+                    }
+                )
 
             # Collect issues (only errors cause validation failure)
             for issue in validation_result.all_issues:
@@ -864,9 +874,7 @@ def doctor(
                     result["fixes"].append(fix_info)
                 else:
                     # Actually apply the fix
-                    fix_result: FixResult = registry.apply_fix(
-                        issue, project_root, db_path
-                    )
+                    fix_result: FixResult = registry.apply_fix(issue, project_root, db_path)
 
                     fix_info["status"] = "applied" if fix_result.success else "failed"
                     fix_info["message"] = fix_result.message
@@ -1002,20 +1010,14 @@ def _doctor_print_results(
             for fix_info in fixes:
                 status = fix_info.get("status", "unknown")
                 if status == "would_apply":
-                    console.print(
-                        f"  [cyan]WOULD FIX[/cyan] {fix_info['description']}"
-                    )
+                    console.print(f"  [cyan]WOULD FIX[/cyan] {fix_info['description']}")
                 elif status == "applied":
-                    console.print(
-                        f"  [green]FIXED[/green] {fix_info['description']}"
-                    )
+                    console.print(f"  [green]FIXED[/green] {fix_info['description']}")
                     if verbose and fix_info.get("files_modified"):
                         for f in fix_info["files_modified"]:
                             console.print(f"    [dim]Modified: {f}[/dim]")
                 elif status == "failed":
-                    console.print(
-                        f"  [red]FAILED[/red] {fix_info['description']}"
-                    )
+                    console.print(f"  [red]FAILED[/red] {fix_info['description']}")
                     console.print(f"    [dim]{fix_info.get('message', '')}[/dim]")
 
             console.print()
@@ -1032,9 +1034,7 @@ def _doctor_print_results(
             _output_warning("No fixes were applied")
     elif dry_run:
         if fixable > 0:
-            _output_info(
-                f"Run [bold]cctx doctor --fix[/bold] to apply {fixable} fix(es)"
-            )
+            _output_info(f"Run [bold]cctx doctor --fix[/bold] to apply {fixable} fix(es)")
     else:
         # Check mode
         if fixable > 0:
@@ -1043,9 +1043,7 @@ def _doctor_print_results(
                 f"Run [bold]cctx doctor --fix[/bold] to apply fixes"
             )
         if len(non_fixable_issues) > 0:
-            _output_info(
-                f"{len(non_fixable_issues)} issue(s) require manual attention"
-            )
+            _output_info(f"{len(non_fixable_issues)} issue(s) require manual attention")
 
 
 # -----------------------------------------------------------------------------
@@ -1127,7 +1125,9 @@ def add_system(
                     try:
                         rel_path = system_path.relative_to(project_root).as_posix()
                     except ValueError:
-                        _exit_error(f"System path {system_path} must be inside project root {project_root}")
+                        _exit_error(
+                            f"System path {system_path} must be inside project root {project_root}"
+                        )
                     create_system(db, rel_path, name)
 
             result["success"] = True

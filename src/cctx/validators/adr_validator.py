@@ -108,9 +108,7 @@ class AdrValidator(BaseValidator):
         match = re.match(r"(ADR-\d+)", filename)
         return match.group(1) if match else None
 
-    def _check_db_registration(
-        self, adr_id: str, adr_file: Path
-    ) -> list[ValidationIssue]:
+    def _check_db_registration(self, adr_id: str, adr_file: Path) -> list[ValidationIssue]:
         """Check if an ADR is registered in the database.
 
         Args:
@@ -130,9 +128,7 @@ class AdrValidator(BaseValidator):
                 adr = get_adr(db, adr_id)
                 if adr is None:
                     rel_path = str(adr_file.relative_to(self.project_root))
-                    system_path = str(
-                        adr_file.parent.parent.relative_to(self.project_root)
-                    )
+                    system_path = str(adr_file.parent.parent.relative_to(self.project_root))
                     issues.append(
                         FixableIssue(
                             system=system_path,
@@ -178,9 +174,7 @@ class AdrValidator(BaseValidator):
         status_match = re.search(r"\*\*Status\*\*:\s*(\w+)", content, re.IGNORECASE)
         if status_match and status_match.group(1).lower() == "superseded":
             # Look for "Superseded by ADR-XXX" reference
-            superseded_by_match = re.search(
-                r"[Ss]uperseded\s+by\s+(ADR-\d+)", content
-            )
+            superseded_by_match = re.search(r"[Ss]uperseded\s+by\s+(ADR-\d+)", content)
             if superseded_by_match:
                 superseding_id = superseded_by_match.group(1)
                 if superseding_id not in all_adr_files:
@@ -208,9 +202,7 @@ class AdrValidator(BaseValidator):
 
         return issues
 
-    def _check_orphan_db_entries(
-        self, all_adr_files: dict[str, Path]
-    ) -> list[ValidationIssue]:
+    def _check_orphan_db_entries(self, all_adr_files: dict[str, Path]) -> list[ValidationIssue]:
         """Check for ADRs in database that don't have corresponding files.
 
         Args:
@@ -245,9 +237,7 @@ class AdrValidator(BaseValidator):
 
         return issues
 
-    def _check_decisions_indexes(
-        self, all_adr_files: dict[str, Path]
-    ) -> list[ValidationIssue]:
+    def _check_decisions_indexes(self, all_adr_files: dict[str, Path]) -> list[ValidationIssue]:
         """Check that decisions.md indexes are in sync with ADR files.
 
         Args:
@@ -280,7 +270,9 @@ class AdrValidator(BaseValidator):
                 if indexed_id not in all_adr_files:
                     # Check if it should be in this context's adr/ directory
                     adr_dir / f"{indexed_id}*.md"
-                    local_matches = list(adr_dir.glob(f"{indexed_id}*.md")) if adr_dir.exists() else []
+                    local_matches = (
+                        list(adr_dir.glob(f"{indexed_id}*.md")) if adr_dir.exists() else []
+                    )
                     if not local_matches:
                         issues.append(
                             ValidationIssue(

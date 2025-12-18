@@ -611,11 +611,11 @@ No code blocks.
 
     def test_code_block_with_backticks_in_content(self) -> None:
         """Test code block containing backticks in content."""
-        content = '''
+        content = """
 ```markdown
 Use `inline code` like this.
 ```
-'''
+"""
         blocks = MarkdownParser.extract_code_blocks(content, language="markdown")
 
         assert len(blocks) == 1

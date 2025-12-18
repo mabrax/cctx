@@ -46,19 +46,14 @@ class FixerRegistry:
         """
         fix_id = fixer_class.fix_id
         if not fix_id:
-            raise ValueError(
-                f"Fixer class {fixer_class.__name__} has no fix_id defined"
-            )
+            raise ValueError(f"Fixer class {fixer_class.__name__} has no fix_id defined")
         if fix_id in self._fixers:
             raise ValueError(
-                f"Fixer for fix_id '{fix_id}' already registered: "
-                f"{self._fixers[fix_id].__name__}"
+                f"Fixer for fix_id '{fix_id}' already registered: {self._fixers[fix_id].__name__}"
             )
         self._fixers[fix_id] = fixer_class
 
-    def get_fixer(
-        self, fix_id: str, project_root: Path, db_path: Path
-    ) -> BaseFixer | None:
+    def get_fixer(self, fix_id: str, project_root: Path, db_path: Path) -> BaseFixer | None:
         """Get an instantiated fixer for the given fix_id.
 
         Args:
@@ -94,9 +89,7 @@ class FixerRegistry:
         """
         return sorted(self._fixers.keys())
 
-    def apply_fix(
-        self, issue: FixableIssue, project_root: Path, db_path: Path
-    ) -> FixResult:
+    def apply_fix(self, issue: FixableIssue, project_root: Path, db_path: Path) -> FixResult:
         """Apply a fix for the given issue using the appropriate fixer.
 
         Convenience method that looks up the fixer and applies the fix.

@@ -92,9 +92,7 @@ class DebtAuditor(BaseValidator):
             # Audit each debt item
             for item in debt_items:
                 debt_items_reviewed += 1
-                issues.extend(
-                    self._audit_debt_item(item, system_path, rel_system)
-                )
+                issues.extend(self._audit_debt_item(item, system_path, rel_system))
 
         # Determine overall status
         has_errors = any(issue.severity == "error" for issue in issues)
@@ -166,12 +164,7 @@ class DebtAuditor(BaseValidator):
         issues: list[ValidationIssue] = []
 
         # Extract fields (flexible column names)
-        debt_id = (
-            item.get("ID")
-            or item.get("id")
-            or item.get("Id")
-            or "unknown"
-        )
+        debt_id = item.get("ID") or item.get("id") or item.get("Id") or "unknown"
         priority = (
             item.get("Priority")
             or item.get("priority")
@@ -180,18 +173,10 @@ class DebtAuditor(BaseValidator):
             or ""
         ).lower()
         created_str = (
-            item.get("Created")
-            or item.get("created")
-            or item.get("Date")
-            or item.get("date")
-            or ""
+            item.get("Created") or item.get("created") or item.get("Date") or item.get("date") or ""
         )
         files_str = (
-            item.get("Files")
-            or item.get("files")
-            or item.get("File")
-            or item.get("file")
-            or ""
+            item.get("Files") or item.get("files") or item.get("File") or item.get("file") or ""
         )
 
         # Parse created date

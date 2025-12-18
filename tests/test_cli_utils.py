@@ -599,9 +599,7 @@ class TestIntegration:
             elif var in os.environ:
                 del os.environ[var]
 
-    def test_full_workflow_with_project_root(
-        self, tmp_path: Path, _clean_env: None
-    ) -> None:
+    def test_full_workflow_with_project_root(self, tmp_path: Path, _clean_env: None) -> None:
         """Test full workflow: find project root, wire config, resolve paths."""
         # Set up project structure
         ctx_dir = tmp_path / ".ctx"

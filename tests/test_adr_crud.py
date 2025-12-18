@@ -429,9 +429,7 @@ class TestDeleteAdr:
             delete_adr(initialized_db, "ADR-001")
 
         # Verify tags were deleted (query the raw table)
-        result = initialized_db.fetchall(
-            "SELECT * FROM adr_tags WHERE adr_id = ?", ("ADR-001",)
-        )
+        result = initialized_db.fetchall("SELECT * FROM adr_tags WHERE adr_id = ?", ("ADR-001",))
         assert len(result) == 0
 
     def test_delete_adr_cascade_deletes_system_links(self, initialized_db: ContextDB) -> None:
@@ -444,9 +442,7 @@ class TestDeleteAdr:
             delete_adr(initialized_db, "ADR-001")
 
         # Verify system links were deleted
-        result = initialized_db.fetchall(
-            "SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",)
-        )
+        result = initialized_db.fetchall("SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",))
         assert len(result) == 0
 
 
@@ -462,9 +458,7 @@ class TestLinkAdrToSystem:
         assert result is True
 
         # Verify via raw query
-        links = initialized_db.fetchall(
-            "SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",)
-        )
+        links = initialized_db.fetchall("SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",))
         assert len(links) == 1
         assert links[0]["system_path"] == "src/systems/data"
 
@@ -489,9 +483,7 @@ class TestLinkAdrToSystem:
             link_adr_to_system(initialized_db, "ADR-001", "src/systems/data")
             link_adr_to_system(initialized_db, "ADR-001", "src/systems/api")
 
-        links = initialized_db.fetchall(
-            "SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",)
-        )
+        links = initialized_db.fetchall("SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",))
         assert len(links) == 2
 
 
@@ -508,9 +500,7 @@ class TestUnlinkAdrFromSystem:
             result = unlink_adr_from_system(initialized_db, "ADR-001", "src/systems/data")
 
         assert result is True
-        links = initialized_db.fetchall(
-            "SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",)
-        )
+        links = initialized_db.fetchall("SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",))
         assert len(links) == 0
 
     def test_unlink_adr_from_system_not_found(self, initialized_db: ContextDB) -> None:
@@ -533,9 +523,7 @@ class TestUnlinkAdrFromSystem:
         with initialized_db.transaction():
             unlink_adr_from_system(initialized_db, "ADR-001", "src/systems/data")
 
-        links = initialized_db.fetchall(
-            "SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",)
-        )
+        links = initialized_db.fetchall("SELECT * FROM adr_systems WHERE adr_id = ?", ("ADR-001",))
         assert len(links) == 1
         assert links[0]["system_path"] == "src/systems/api"
 
@@ -649,9 +637,7 @@ class TestGetSystemsForAdr:
         paths = [s["path"] for s in systems]
         assert paths == ["src/systems/apple", "src/systems/zebra"]
 
-    def test_get_systems_for_adr_returns_full_system_info(
-        self, initialized_db: ContextDB
-    ) -> None:
+    def test_get_systems_for_adr_returns_full_system_info(self, initialized_db: ContextDB) -> None:
         """Test get_systems_for_adr returns full system info."""
         with initialized_db.transaction():
             create_system(

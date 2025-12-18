@@ -181,7 +181,7 @@ class TestHasChangesSince:
         """Test with multiple commits."""
         mock_run.return_value = MagicMock(
             returncode=0,
-            stdout="abc1234 First commit\n" "def5678 Second commit\n" "ghi9012 Third commit\n",
+            stdout="abc1234 First commit\ndef5678 Second commit\nghi9012 Third commit\n",
         )
         since_date = datetime(2025, 1, 1, 0, 0, 0)
         result = has_changes_since(Path("test/file.txt"), since_date)
@@ -226,9 +226,7 @@ class TestIntegration:
             temp_path.unlink()
 
     @patch("cctx.validators.git_helper.subprocess.run")
-    def test_get_file_mtime_git_fallback_to_fs_not_needed(
-        self, mock_run: MagicMock
-    ) -> None:
+    def test_get_file_mtime_git_fallback_to_fs_not_needed(self, mock_run: MagicMock) -> None:
         """Test that get_file_mtime_git returns None when file not in git."""
         with tempfile.NamedTemporaryFile(delete=False) as f:
             temp_path = Path(f.name)

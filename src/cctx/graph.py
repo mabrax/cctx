@@ -327,9 +327,7 @@ def get_topological_order(db: ContextDB) -> list[str]:
         return []
 
     # Calculate in-degree for each node (number of unresolved dependencies)
-    in_degree: dict[str, int] = {
-        node: len(deps) for node, deps in dependencies_map.items()
-    }
+    in_degree: dict[str, int] = {node: len(deps) for node, deps in dependencies_map.items()}
 
     # Start with nodes that have no dependencies (in_degree == 0)
     queue: list[str] = sorted([node for node, degree in in_degree.items() if degree == 0])

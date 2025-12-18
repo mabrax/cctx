@@ -55,9 +55,7 @@ class TestInitCommand:
         import sqlite3
 
         conn = sqlite3.connect(str(db_path))
-        cursor = conn.execute(
-            "SELECT name FROM sqlite_master WHERE type='table'"
-        )
+        cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
         tables = {row[0] for row in cursor.fetchall()}
         conn.close()
         assert "systems" in tables
@@ -88,9 +86,7 @@ class TestInitCommand:
 
     def test_init_with_custom_ctx_dir(self, tmp_path: Path) -> None:
         """Test init command with custom --ctx-dir."""
-        result = runner.invoke(
-            app, ["init", str(tmp_path), "--ctx-dir", ".custom-ctx"]
-        )
+        result = runner.invoke(app, ["init", str(tmp_path), "--ctx-dir", ".custom-ctx"])
         assert result.exit_code == 0
         assert (tmp_path / ".custom-ctx").exists()
         assert (tmp_path / ".custom-ctx" / "knowledge.db").exists()
@@ -443,16 +439,13 @@ class TestAddSystemCommand:
         original_cwd = Path.cwd()
         try:
             os.chdir(tmp_path)
-            result = runner.invoke(
-                app, ["add-system", "src/systems/auth", "--json"]
-            )
+            result = runner.invoke(app, ["add-system", "src/systems/auth", "--json"])
             assert result.exit_code == 0
             data = json.loads(result.stdout)
             assert data["success"] is True
             assert "ctx_path" in data
         finally:
             os.chdir(original_cwd)
-
 
     def test_add_system_outside_root_fails(self, tmp_path: Path) -> None:
         """Test add-system fails gracefully when path is outside project root."""
@@ -471,7 +464,6 @@ class TestAddSystemCommand:
         finally:
             os.chdir(original_cwd)
 
-
     def test_add_system_no_redundant_suffix(self, tmp_path: Path) -> None:
         """Test add-system avoids 'System System' suffix."""
         runner.invoke(app, ["init", str(tmp_path)])
@@ -486,6 +478,7 @@ class TestAddSystemCommand:
 
             # Check the generated name in knowledge.db
             from cctx.database import ContextDB
+
             db_path = tmp_path / ".ctx" / "knowledge.db"
             with ContextDB(db_path, auto_init=False) as db:
                 rows = db.fetchall("SELECT path, name FROM systems")
@@ -516,9 +509,7 @@ class TestAdrCommand:
         original_cwd = Path.cwd()
         try:
             os.chdir(tmp_path)
-            result = runner.invoke(
-                app, ["adr", "Use PostgreSQL for persistence"]
-            )
+            result = runner.invoke(app, ["adr", "Use PostgreSQL for persistence"])
             assert result.exit_code == 0
             assert "Success:" in result.stdout
             assert "ADR-001" in result.stdout
@@ -584,9 +575,7 @@ class TestAdrCommand:
         original_cwd = Path.cwd()
         try:
             os.chdir(tmp_path)
-            result = runner.invoke(
-                app, ["adr", "Use PostgreSQL", "--json"]
-            )
+            result = runner.invoke(app, ["adr", "Use PostgreSQL", "--json"])
             assert result.exit_code == 0
             data = json.loads(result.stdout)
             assert data["success"] is True
@@ -623,9 +612,7 @@ class TestAdrCommand:
 
             # Try to create ADR in that system
             # Note: We need to pass the path as it would be resolved
-            result = runner.invoke(
-                app, ["adr", "Bad Path", "--system", str(outside_system)]
-            )
+            result = runner.invoke(app, ["adr", "Bad Path", "--system", str(outside_system)])
             # This fails because system path resolution happens before the check we added
             # But let's see if our error handling catches it
             assert result.exit_code == 1
@@ -649,7 +636,7 @@ class TestAdrCommand:
                 # Change the status line to something unexpected
                 content = content.replace(
                     "**Status**: proposed | accepted | deprecated | superseded",
-                    "**Status**: draft | final"
+                    "**Status**: draft | final",
                 )
                 template_path.write_text(content)
 
@@ -753,7 +740,9 @@ class TestListCommand:
             result = runner.invoke(app, ["list", "debt"])
             assert result.exit_code == 0
             # Debt tracking is placeholder
-            assert "not yet implemented" in result.stdout.lower() or "debt.md" in result.stdout.lower()
+            assert (
+                "not yet implemented" in result.stdout.lower() or "debt.md" in result.stdout.lower()
+            )
         finally:
             os.chdir(original_cwd)
 
@@ -828,14 +817,18 @@ class TestListCommand:
 class TestDoctorCommand:
     """Tests for the doctor command."""
 
-    def test_doctor_without_ctx_fails(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_without_ctx_fails(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test doctor command fails when no .ctx directory exists."""
         monkeypatch.chdir(tmp_path)
         result = runner.invoke(app, ["doctor"])
         assert result.exit_code == 1
         assert "Could not find project root" in result.output
 
-    def test_doctor_with_initialized_ctx(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_with_initialized_ctx(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test doctor command succeeds with initialized .ctx/."""
         runner.invoke(app, ["init", str(tmp_path)])
         monkeypatch.chdir(tmp_path)
@@ -843,7 +836,9 @@ class TestDoctorCommand:
         # Doctor should succeed with no issues on fresh init
         assert result.exit_code == 0
 
-    def test_doctor_lists_fixable_issues(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_lists_fixable_issues(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test doctor command lists fixable issues."""
         runner.invoke(app, ["init", str(tmp_path)])
 
@@ -878,7 +873,9 @@ class TestDoctorCommand:
         # snapshot.md should NOT have been created
         assert not (ctx_path / "snapshot.md").exists()
 
-    def test_doctor_fix_applies_fixes(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_fix_applies_fixes(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test doctor command with --fix flag applies fixes."""
         runner.invoke(app, ["init", str(tmp_path)])
 
@@ -928,7 +925,9 @@ class TestDoctorCommand:
         assert len(fixable) > 0
         assert "fix_id" in fixable[0]
 
-    def test_doctor_json_with_dry_run(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_json_with_dry_run(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test doctor command JSON output with --dry-run."""
         runner.invoke(app, ["init", str(tmp_path)])
 
@@ -975,7 +974,9 @@ class TestDoctorCommand:
         # Verbose should have more detailed output
         # (Just verify it runs without error)
 
-    def test_doctor_exit_code_zero_when_no_issues(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_exit_code_zero_when_no_issues(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test doctor command exits with 0 when no issues found."""
         runner.invoke(app, ["init", str(tmp_path)])
         monkeypatch.chdir(tmp_path)
@@ -983,7 +984,9 @@ class TestDoctorCommand:
         # Clean project should have no issues
         assert result.exit_code == 0
 
-    def test_doctor_exit_code_one_when_issues_remain(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_exit_code_one_when_issues_remain(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test doctor command exits with 1 when issues remain unfixed."""
         runner.invoke(app, ["init", str(tmp_path)])
 
@@ -997,7 +1000,9 @@ class TestDoctorCommand:
         # Should have exit code 1 due to unfixed issues
         assert result.exit_code == 1
 
-    def test_doctor_with_custom_ctx_dir(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_with_custom_ctx_dir(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test doctor command with custom context directory."""
         # Initialize with custom directory
         runner.invoke(app, ["init", str(tmp_path), "--ctx-dir", ".my-ctx"])
@@ -1011,7 +1016,9 @@ class TestDoctorCommand:
         result = runner.invoke(app, ["doctor", "--ctx-dir", ".my-ctx"])
         assert result.exit_code == 0
 
-    def test_doctor_fix_is_idempotent(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_fix_is_idempotent(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test that running doctor --fix multiple times is safe."""
         runner.invoke(app, ["init", str(tmp_path)])
 
@@ -1039,7 +1046,9 @@ class TestDoctorCommand:
         assert result.exit_code == 1
         assert "not initialized" in result.output.lower() or "init" in result.output.lower()
 
-    def test_doctor_with_non_fixable_issues(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_doctor_with_non_fixable_issues(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test doctor command behavior when non-fixable issues exist."""
         runner.invoke(app, ["init", str(tmp_path)])
 
@@ -1070,4 +1079,3 @@ class TestDoctorCommand:
         # Should NOT say it is fixable (checking implicitly by absence of "Fix:" prefix for this issue)
         # But broadly checking if it mentions non-fixable or manual attention
         assert "manual attention" in result.output or "Non-fixable" in result.output
-

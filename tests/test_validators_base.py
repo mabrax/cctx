@@ -149,25 +149,19 @@ class TestValidatorResult:
 class TestBaseValidator:
     """Tests for BaseValidator abstract base class."""
 
-    def test_init_with_path_objects(
-        self, temp_project_root: Path, temp_db_path: Path
-    ) -> None:
+    def test_init_with_path_objects(self, temp_project_root: Path, temp_db_path: Path) -> None:
         """Test initializing validator with Path objects."""
         validator = ConcreteValidator(temp_project_root, temp_db_path)
         assert validator.project_root == temp_project_root
         assert validator.db_path == temp_db_path
 
-    def test_init_stores_paths(
-        self, temp_project_root: Path, temp_db_path: Path
-    ) -> None:
+    def test_init_stores_paths(self, temp_project_root: Path, temp_db_path: Path) -> None:
         """Test that paths are stored as Path objects."""
         validator = ConcreteValidator(temp_project_root, temp_db_path)
         assert isinstance(validator.project_root, Path)
         assert isinstance(validator.db_path, Path)
 
-    def test_validate_method_callable(
-        self, temp_project_root: Path, temp_db_path: Path
-    ) -> None:
+    def test_validate_method_callable(self, temp_project_root: Path, temp_db_path: Path) -> None:
         """Test that validate method can be called."""
         validator = ConcreteValidator(temp_project_root, temp_db_path)
         result = validator.validate()

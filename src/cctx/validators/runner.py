@@ -111,9 +111,7 @@ class ValidationRunner:
         results: list[ValidatorResult] = []
 
         # Filter to valid validator names
-        valid_names = [
-            name for name in validator_names if name in self.VALIDATORS
-        ]
+        valid_names = [name for name in validator_names if name in self.VALIDATORS]
 
         if not valid_names:
             return AggregatedResult(
@@ -211,9 +209,7 @@ class ValidationRunner:
         """
         results: list[ValidatorResult] = []
 
-        with concurrent.futures.ThreadPoolExecutor(
-            max_workers=len(validator_names)
-        ) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=len(validator_names)) as executor:
             # Submit all validators
             future_to_name: dict[concurrent.futures.Future[ValidatorResult], str] = {}
             for name in validator_names:

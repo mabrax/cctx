@@ -148,17 +148,13 @@ class AdrFixer(BaseFixer):
 
         # Extract title from first heading
         # Pattern: # ADR-XXX: Title or just # Title
-        title_match = re.search(
-            r"^#\s+(?:ADR-\d+:\s*)?(.+)$", content, re.MULTILINE
-        )
+        title_match = re.search(r"^#\s+(?:ADR-\d+:\s*)?(.+)$", content, re.MULTILINE)
         if title_match:
             result["title"] = title_match.group(1).strip()
 
         # Extract status
         # Pattern: **Status**: value or - **Status**: value
-        status_match = re.search(
-            r"\*\*Status\*\*:\s*(\w+)", content, re.IGNORECASE
-        )
+        status_match = re.search(r"\*\*Status\*\*:\s*(\w+)", content, re.IGNORECASE)
         if status_match:
             result["status"] = status_match.group(1).lower()
 
@@ -183,9 +179,7 @@ class AdrFixer(BaseFixer):
 
         # Split content by ## headings
         # Pattern finds ## Heading and captures until next ## or end
-        section_pattern = re.compile(
-            r"##\s+([^\n]+)\n(.*?)(?=\n##\s+|\Z)", re.DOTALL
-        )
+        section_pattern = re.compile(r"##\s+([^\n]+)\n(.*?)(?=\n##\s+|\Z)", re.DOTALL)
 
         for match in section_pattern.finditer(content):
             heading = match.group(1).strip().lower()

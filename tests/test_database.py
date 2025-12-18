@@ -276,7 +276,12 @@ class TestContextDBExecute:
             initialized_db.execute(
                 "INSERT INTO systems (path, name, created_at, updated_at) "
                 "VALUES (:path, :name, :created, :updated)",
-                {"path": "test/path", "name": "Test", "created": "2025-01-01", "updated": "2025-01-01"},
+                {
+                    "path": "test/path",
+                    "name": "Test",
+                    "created": "2025-01-01",
+                    "updated": "2025-01-01",
+                },
             )
 
         result = initialized_db.fetchone("SELECT * FROM systems")
