@@ -354,7 +354,6 @@ class TestGraphFixer:
         # Create .ctx dir with database but then remove the .ctx dir
         # to test the case where ctx exists but graph.json location doesn't
         # Actually, since db check comes first, let's test with db in another location
-        ctx_dir = tmp_path / ".ctx"
         # Create db path at a different location to bypass db check
         other_dir = tmp_path / "other"
         other_dir.mkdir(parents=True, exist_ok=True)
@@ -497,9 +496,7 @@ class TestMissingTemplateFileFixer:
         # Create templates directory
         templates_path = tmp_path / ".ctx" / "templates"
         templates_path.mkdir(parents=True, exist_ok=True)
-        (templates_path / "constraints.template.md").write_text(
-            "# {system_name} Constraints\n"
-        )
+        (templates_path / "constraints.template.md").write_text("# {system_name} Constraints\n")
 
         # Create issue
         issue = FixableIssue(
@@ -978,7 +975,7 @@ class TestFixerRegistry:
         class BadFixer(BaseFixer):
             fix_id = ""
 
-            def fix(self, issue: FixableIssue) -> FixResult:
+            def fix(self, _issue: FixableIssue) -> FixResult:
                 return FixResult(success=True, message="")
 
         registry = FixerRegistry()

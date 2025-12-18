@@ -101,9 +101,7 @@ class SnapshotValidator(BaseValidator):
 
         return sorted(systems)
 
-    def _check_file_existence(
-        self, system_path: Path, content: str
-    ) -> list[ValidationIssue]:
+    def _check_file_existence(self, system_path: Path, content: str) -> list[ValidationIssue]:
         """Check that files listed in snapshot.md exist.
 
         Args:
@@ -155,9 +153,7 @@ class SnapshotValidator(BaseValidator):
 
         return issues
 
-    def _check_dependencies(
-        self, system_path: Path, content: str
-    ) -> list[ValidationIssue]:
+    def _check_dependencies(self, system_path: Path, content: str) -> list[ValidationIssue]:
         """Check that dependencies listed in snapshot.md exist.
 
         Args:
@@ -227,9 +223,7 @@ class SnapshotValidator(BaseValidator):
 
         return issues
 
-    def _check_dependents(
-        self, system_path: Path, content: str
-    ) -> list[ValidationIssue]:
+    def _check_dependents(self, system_path: Path, content: str) -> list[ValidationIssue]:
         """Check that dependents listed in snapshot.md actually import this system.
 
         Args:
@@ -320,18 +314,26 @@ class SnapshotValidator(BaseValidator):
         # Looks like a specific file path (not a system directory)
         # File paths have extensions like .ts, .js, .tsx, .jsx
         file_extensions = (
-            ".ts", ".js", ".tsx", ".jsx", ".py", ".rs", ".go",
-            ".json", ".yaml", ".yml", ".md", ".css", ".html",
+            ".ts",
+            ".js",
+            ".tsx",
+            ".jsx",
+            ".py",
+            ".rs",
+            ".go",
+            ".json",
+            ".yaml",
+            ".yml",
+            ".md",
+            ".css",
+            ".html",
         )
         if any(ref.endswith(ext) for ext in file_extensions):
             return True
 
         # Descriptive text with spaces (e.g., "Scene classes", "UI components")
         # System paths typically don't have spaces
-        if " " in ref and not ref.startswith("src/"):
-            return True
-
-        return False
+        return bool(" " in ref and not ref.startswith("src/"))
 
     def _system_exists(self, system_path: str) -> bool:
         """Check if a system exists (either in DB or on filesystem).

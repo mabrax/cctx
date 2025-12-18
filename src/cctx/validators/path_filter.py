@@ -9,29 +9,33 @@ from __future__ import annotations
 from pathlib import Path
 
 # Directories to exclude when scanning for .ctx directories
-IGNORED_DIRS = frozenset({
-    ".venv",
-    "venv",
-    "node_modules",
-    "__pycache__",
-    ".git",
-    "dist",
-    "build",
-    ".tox",
-    ".nox",
-    ".mypy_cache",
-    ".pytest_cache",
-    ".ruff_cache",
-    "site-packages",
-})
+IGNORED_DIRS = frozenset(
+    {
+        ".venv",
+        "venv",
+        "node_modules",
+        "__pycache__",
+        ".git",
+        "dist",
+        "build",
+        ".tox",
+        ".nox",
+        ".mypy_cache",
+        ".pytest_cache",
+        ".ruff_cache",
+        "site-packages",
+    }
+)
 
 # Path segments that indicate test fixtures (should be excluded)
-FIXTURE_INDICATORS = frozenset({
-    "fixtures",
-    "fixture",
-    "test_data",
-    "testdata",
-})
+FIXTURE_INDICATORS = frozenset(
+    {
+        "fixtures",
+        "fixture",
+        "test_data",
+        "testdata",
+    }
+)
 
 
 def _should_skip_path(path: Path) -> bool:
@@ -50,10 +54,7 @@ def _should_skip_path(path: Path) -> bool:
         return True
 
     # Skip if path contains fixture indicators
-    if parts & FIXTURE_INDICATORS:
-        return True
-
-    return False
+    return bool(parts & FIXTURE_INDICATORS)
 
 
 def find_ctx_directories(project_root: Path) -> list[Path]:
